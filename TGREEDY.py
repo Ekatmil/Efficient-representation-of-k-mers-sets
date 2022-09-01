@@ -2,7 +2,9 @@ from pickle import FALSE, TRUE
 from re import sub
 import sys
 from xml.etree.ElementTree import tostring
+import time
 
+start_time = time.time()
 
 #Making Graph
 class Vertex:
@@ -76,7 +78,9 @@ def overlap (str1, str2):
 # for line in sys.stdin:
 #     arr.append(line)
 
-arr = ["aabcs", "abcsa","csaab", "abcsa", "sabac"]
+
+#here add list of k-mers 
+arr = ["aabcs", "abcsa","csaab", "abcsa", "sabac", "bacaacs"]
 
 arr = list(dict.fromkeys(arr)) #remove duplicates
 
@@ -86,7 +90,6 @@ G = Graph()
 for a in arr:
     G.add_vertex(a)
 
-#
 for i in range (0, len(arr)):
      for j in range (i+1,len(arr)):
          G.add_edge(arr[i], arr[j], overlap(arr[i], arr[j]))
@@ -117,33 +120,76 @@ def shortest(arr):
     return shortestStr
 
 # function that outputs the path with the largest overlaps
+#check out if it works 
+
+#Problems:
+#1) when cur_ov and new_ov are different. Nothing is taken to the superStr
+#   try to add all of the new str without the overlap (so overalp of new_node and cur_ov -> ov[2])
+#
+
 def circle_helper (superStr, node, arr, i, cur_ov, new_ov):
     if (len(arr) == i-1):
         superStr = superStr + new_ov[2]
-        #print (superStr)
         return superStr
     else:
         new_node = largest_weight(node, arr)[0]
 
+        #print ("Node to compare with is: ", new_node)
         if (cur_ov == None):
             new_str = str(node)
         else:
             new_ov = overlap(str(node), str(new_node))
-            new_str = overlap(cur_ov, new_ov[1])[2]
 
+            if (len(cur_ov) + new_ov[3] > len (str(node))):
+                new_str = overlap(cur_ov, new_ov[1])[2]
+                if (new_str == ""):
+                    new_str = overlap(cur_ov, str(new_node))[2]
+            else:
+                    new_str = overlap (cur_ov, str(node))[2]
+
+            #print ("New overlap: ", new_ov)
+            #print ("Overlap of overlaps: ", overlap(cur_ov, new_ov[1]) )
+
+        #print ("STRING to add: ", new_str)
         cur_ov = overlap(str(node), str(new_node))[1]
         superStr = superStr + new_str
         arr.append(str(node))
-        circle_helper (superStr, new_node, arr, i, cur_ov, new_ov)
+        #print ("Current overlap is: ", cur_ov)
+        #print ("New superstr is: ", superStr)
+        #print ("Array is: ", arr)
+        return (circle_helper (superStr, new_node, arr, i, cur_ov, new_ov))
 
 def circle (node, num):
     ar = list()
-    return( circle_helper("", node, ar, num, None, None )) #output is None
+    return( circle_helper("", node, ar, num, None, None ))
 
 all_arr=list()
 for v in G:
+    #print("-----------")
+    #print ("Node is: ", str(v))
     k = circle(v, G.numVertex)
-    print (k)
-    #all_arr.append(k)
+    all_arr.append(k)
+    
 
-#print(shortest(all_arr))
+def findMask (arr, str1):
+    for str2 in arr:
+        str3 = str1.lower()
+        i = str3.find(str2)
+        str1 = str1[:i] + str1[i].upper() + str1[i+1:]
+    return str1
+
+def changeCaps(str1):
+        i = 0
+        str2 = ""
+        while i < len(str1):
+            if str1[i].islower():
+                str2 = str2 + str1[i].upper()
+                i = i + 1
+            else:
+                str2 = str2 + str1[i].lower()
+                i = i + 1
+        return str2
+
+print (findMask(arr, shortest(all_arr)))
+
+print ("Time is: ", time.time() - start_time)
