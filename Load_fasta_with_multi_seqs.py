@@ -1,4 +1,6 @@
-import sys 
+#! /usr/bin/env python3
+
+import sys
 
 def read_fasta(file_name):
     file = open(file_name)
