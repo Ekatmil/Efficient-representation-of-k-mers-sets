@@ -9,7 +9,6 @@ from Greedy_Approxination import *
 from mask import *
 
 def_k = 31
-outputFileExists = False
 
 parser = argparse.ArgumentParser(description="")
 
@@ -73,11 +72,6 @@ config = parser.parse_args(sys.argv[1:])
 #if no algorithm chosen
 if not (config.greedy or config.hamiltonian or config.simplitig):
     parser.error('No algorithm requested, add -g, -s or -gh')
-
-#output file
-if (config.output != None):
-    outputFileExists = True,
-    outputFile = config.output
     
 #load fasta 
 arr = load(config.k, config.input)
@@ -88,6 +82,16 @@ if config.simplitig == True:
     superStr = findSuperStr (superSet)
 if config.greedy == True:
     superStr = findSuperStr (arr) #string 
-    
-print(findMask(arr_saved,superStr))
+if config.hamiltonian == True:
+    print ("To be updated")
+
+superStrMask = findMask(arr_saved, superStr)
+
+#output 
+if (config.output != None):
+    output_file = open(config.output, 'w')
+    output_file.write(superStrMask)
+    output_file.close()
+else:
+    print (superStrMask)
 
