@@ -84,8 +84,10 @@ arr = load(config.k, config.input)
 arr_saved = arr.copy()
 
 if config.simplitig == True:
-    superStr = compute_simplitig (arr, config.k) #set 
+    superSet = compute_simplitig (arr, config.k) #set 
+    superStr = findSuperStr (superSet)
 if config.greedy == True:
     superStr = findSuperStr (arr) #string 
-print(findMask(superStr))
+    
+print(findMask(arr_saved,superStr))
 
