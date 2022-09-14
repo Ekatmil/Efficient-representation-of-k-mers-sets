@@ -1,60 +1,91 @@
 #!/usr/bin/env python 3
 from json import load
-from Bio import SeqIO
+import sys
+import argparse
 import sys
 from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
+from mask import *
 
+def_k = 31
 outputFileExists = False
-algo = ""
-k = 0
-def help():
-    print ("Usage:\nmain.py OPTION OPTION... [INPUT_FILE] [OPTIONAL_OUTPUT_FILE]\nOPTIONS:\n -k or -kmer for the k\n -h or --help for the help\n-g or --greedy for the greedy approximation algorithm\n-h or --hamiltonian for the greedy-hamiltonian algorithm\n-s or --simplitig for the simplitig algorithm")
-    exit()
 
-args = sys.argv[1:]
+parser = argparse.ArgumentParser(description="")
 
-#not correct amount arguments
-if len(args) <= 2 or len(args) > 5:
-    help()
+parser.add_argument(
+    '-k',
+    '--kmer',
+    dest='k',
+    type=int,
+    default=def_k,
+    help='',
+    required=True,
+)
 
-#not provided with k 
-elif args[0] != '-k' and args[0] != "--kmer":
-    help()
+parser.add_argument(
+    '-s',
+    '--simplitig',
+    help= 'call for Simplitig',
+    dest='simplitig',
+    action = "store_true",
+    required=False,
+)
 
-#everything is fine
-else:
-    k = int(args[1])
-    if not args[3].startswith("-"):
-        filename = args[3]
-    else: 
-        help()
+parser.add_argument(
+    '-gh',
+    '--hamiltonian',
+    help = "call for Greedy Hamiltonian",
+    dest='hamiltonian',
+    action = "store_true",
+    required=False,
+)
 
-    if len(args) == 5:
-        output_file = args[4]
-        outputFileExists = True
+parser.add_argument(
+    '-g',
+    '--greedy',
+    dest='greedy',
+    help = "call for Greedy Approximation",
+    action = "store_true",
+    required=False,
+)
 
-    if args[2] == "-h" or args[2] == "--help":
-        help()
-    elif args[2] == "-s" or args[2] == "--simplitig":
-        algo = "s"
-    elif args[2] == "-h" or args[2] == "--hamiltonian":
-        algo = "h"
-    elif args[2] == "-g" or args[2] == "--greedy":
-        algo = "g"
-    else:
-        help()
+parser.add_argument(
+    '-i',
+    '--input',
+    type=str,
+    help = "input file",
+    dest='input',
+    required=True,
+)
+parser.add_argument(
+    '-o',
+    '--output',
+    dest='output',
+    help = "optional output file",
+    type=str ,
+    required=False,
+)
 
-#load fasta sequence into the set arr
-arr = load(k, filename)
 
-start_time = time.time()
-if algo == "s":
-    superstr = compute_simplitig(arr, k)
-if algo == "g":
-    superstr = findShortest(list(arr), len(arr))
+config = parser.parse_args(sys.argv[1:])
 
-print (superstr)
-print ("Done with Load: ", time.time() - start_time)
+#if no algorithm chosen
+if not (config.greedy or config.hamiltonian or config.simplitig):
+    parser.error('No algorithm requested, add -g, -s or -gh')
+
+#output file
+if (config.output != None):
+    outputFileExists = True,
+    outputFile = config.output
+    
+#load fasta 
+arr = load(config.k, config.input)
+arr_saved = arr.copy()
+
+if config.simplitig == True:
+    superStr = compute_simplitig (arr, config.k) #set 
+if config.greedy == True:
+    superStr = findSuperStr (arr) #string 
+print(findMask(superStr))
 
