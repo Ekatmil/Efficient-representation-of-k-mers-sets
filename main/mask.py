@@ -1,19 +1,24 @@
-#Version which finds first occurence of set string in superstring 
-# def findMask (arr, str1):
-#     #the fisrt one should be by default lower case 
-#     for str2 in arr:
-#         str3 = str1.upper() #default version
-#         i = str3.find(str2)
-#         str1 = str1[:i] + str1[i].lower() + str1[i+1:]
-#     return str1.swapcase()
+from curses.ascii import isalpha
 
-#Version which finds all occurences of set string in superstring 
-import re
-def findMask (arr, str1):
-    for str2 in arr:
-        str3 = str1.upper() #default version
-        i = str3.find(str2)
-        occ = [m.start() for m in re.finditer(str2, str3)]
-        for i in occ:
-            str1 = str1[:i] + str1[i].lower() + str1[i+1:]
-    return str1.swapcase()
+
+def findMask(Kset, str1, k):
+    l1 = list(str1)
+    for i in range(0, len(l1) - k + 1):
+        substr = ''.join(map(str, l1[i:(i + k)]))
+        if substr in Kset:
+            l1[i] = l1[i].lower()
+    StrMask = ''.join(map(str, l1))
+    return StrMask.swapcase()
+
+
+def findMaskBinary(Kset, str1, k):
+    l1 = list(str1)
+    for i in range(0, len(l1) - k + 1):
+        substr = ''.join(map(str, l1[i:(i + k)]))
+        if substr in Kset:
+            l1[i] = "1"
+    for i in range(0, len(l1)):
+        if l1[i].isalpha():
+            l1[i] = "0"
+    StrMask = ''.join(map(str, l1))
+    return StrMask
