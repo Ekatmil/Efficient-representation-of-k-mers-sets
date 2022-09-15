@@ -3,10 +3,6 @@ from pickle import FALSE, TRUE
 from re import sub
 from xml.etree.ElementTree import tostring
 
-
-
-
-
 def load (k, fileName):
     # start_time = time.time()
     seqs = SeqIO.parse(fileName, 'fasta')
