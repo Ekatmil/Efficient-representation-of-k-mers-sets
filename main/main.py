@@ -95,17 +95,25 @@ if config.greedy == True:
 if config.hamiltonian == True:
     print("To be updated")
 
-#mask
+#mask and output 
+
 if config.bitstring == True:
-    superStrMask = superStr + "\n" + findMaskBinary(arr_saved, superStr,
-                                                    config.k)
+    superStrMask = findMaskBinary(arr_saved, superStr, config.k)
+    if (config.output != None):
+        output_file = open(config.output, 'w')
+        output_file.write(superStr)
+        output_file.close()
+        fileMask = open(config.output + ".mask", 'w')
+        fileMask.write(superStrMask)
+        fileMask.close()
+    else:
+        print(superStr + "\n" + superStrMask)
+
 else:
     superStrMask = findMask(arr_saved, superStr, config.k)
-
-#output
-if (config.output != None):
-    output_file = open(config.output, 'w')
-    output_file.write(superStrMask)
-    output_file.close()
-else:
-    print(superStrMask)
+    if (config.output != None):
+        output_file = open(config.output, 'w')
+        output_file.write(superStrMask)
+        output_file.close()
+    else:
+        print(superStrMask)
