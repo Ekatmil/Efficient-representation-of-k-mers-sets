@@ -10,7 +10,7 @@ def findMask(Kset, str1, k):
 
 def findMaskBinary(Kset, str1, k):
     l1 = []
-    for i in range(0, len(str1) - k + 1):
+    for i in range(0, len(str1)):
         substr = str1[i:i + k]
         if substr in Kset:
             l1.append("1")
