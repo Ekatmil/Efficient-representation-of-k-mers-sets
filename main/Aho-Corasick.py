@@ -2,6 +2,7 @@
 
 #class Aho-Corasick 
 
+from email.mime import audio
 import queue
 
 
@@ -88,6 +89,11 @@ class Aho_Corasick:
                     self.output.setdefault(to_state, []).extend(self.output.get(res, [])) #check this out 
         
 
+def addMultipleValues (dict, key, value):
+    if key not in dict:
+        dict[key] = list()
+    dict[key].append(value)
+    return dict
 
 def processing(kmers, automaton):
     list_L = {}
@@ -110,7 +116,7 @@ def processing(kmers, automaton):
 
             # print ("State is: ", state)
 
-            list_L[state] = j
+            list_L = addMultipleValues (list_L, state, j)
             # print ("List L is: ", list_L)
 
             if j == len(kmers[i]) - 1:
@@ -127,7 +133,6 @@ def processing(kmers, automaton):
                     state_F[i] = 0 
                     # print ("State F is: ", state_F)
             j = j + 1
-    # print (automaton.goto)
 
     # print ("!!!!!!!!!!!!!!!!!!!!")
     queue = [0]
@@ -154,21 +159,85 @@ def processing(kmers, automaton):
 
                 link_B[to_state] = pointer_B
                 pointer_B = to_state
+                
                 helper = inverse_E.get(automaton.fail[to_state])
                 if helper != None:
                     state_F[helper] = 0
                 # print ("FAIL FUNCTION: ", automaton.fail[to_state])
                 # print ("link_B is: ", link_B)
     
-    return (depth, list_L, link_B, state_F, inverse_E)
+    return (depth, list_L, link_B, pointer_B, state_F, inverse_E, automaton)
+
+def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
+    list_P = {}
+    forbidden = {}
+    first = {}
+    last = {}
+    H = []
+    print (state_F)
+    for j in range (0, m):
+        print (j)
+        print ("Get j: ", state_F.get(j))
+        helper_1 = state_F.get(j)
+        if helper_1 != 0:
+            print ("here")
+            print (automaton.fail.get(helper_1))
+            helper = automaton.fail[helper_1]
+            print ("helper is: ", helper)
+            print (j)
+            list_P = addMultipleValues(list_P, helper, j)
+            print ("New list is: ", list_P)
+            first[j] = last[j] = j 
+        else:
+            forbidden[j] = True
+    
+    print ("NEW")
+    print (forbidden)
+
+    state = link_B.get(pointer_B)
+    print (state)
+
+    while state != 0:
+        print (state)
+        print (list_P)
+        if list_P.get(state) != None:
+            for state1, list_j in list_L.items():
+                if state1 != state:
+                    break
+                else: 
+                    for j in list_j:
+                        #here
+                        print (j)
+                        print (forbidden.get(j))
+                        if forbidden.get(j) != None: 
+                            if forbidden[j] == False:
+                                i = list_P[state][0]
+                                if first[i] == j:
+                                    if len(list_P[state]) == 1:
+                                        break
+                                    else:
+                                        i = list_P[state][1]
+                                #H = H + {(xi, xj)}
+                                H.append()
+                                forbidden[j] = True
+                                list_P[state] = list_P[state].remove(i)
+                                first[last[j]] = first[i]
+                                last[first[i]] = last[j]  
+
+            list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state])
+        state = link_B[state]    
 
 a = ['aha', "aho", 'aa', 'cora']
 l = "akikiratlea"
 A = Aho_Corasick (a)
-(depth, list_L, link_B, state_F, inverse_E) = processing (a, A)
+(depth, list_L, link_B, pointer_B, state_F, inverse_E, automaton) = processing (a, A)
+Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, 4)
+
 print ("RESULT")
 print ("Depth: ", depth)
 print ("List L: ", list_L)
 print ("b-link: ", link_B)
 print ("state F: ", state_F)
 print ("inverse of F: ", inverse_E)
+
+               
