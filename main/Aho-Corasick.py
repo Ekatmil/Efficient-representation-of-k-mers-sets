@@ -14,6 +14,14 @@ class Aho_Corasick:
         self.goto_function()
         self.fail_function()
 
+    def isLeaf (self, state):
+        for (from_state, char), to_state in self.goto.items():
+            if state == from_state:
+                print (state)
+                return False
+        return True
+
+
     #CONSTRUCTION OF GOTO FUNCTION (Algo 2)
     #Output: goto function and partially comuted output function
 
@@ -78,6 +86,7 @@ class Aho_Corasick:
                     self.fail[to_state] = res
 
                     self.output.setdefault(to_state, []).extend(self.output.get(res, [])) #check this out 
+        
 
 
 def processing(kmers, automaton):
@@ -87,74 +96,79 @@ def processing(kmers, automaton):
     depth = {}
     link_B = {}
 
-    print ("kmers are: ", kmers)
+    # print ("kmers are: ", kmers)
 
     for i in range (0, len(kmers)):
         state = 0
         j = 0
         for char in kmers[i]:
+            # print ("J is: ", j)
 
-            print ("Char is: ", char)
+            # print ("Char is: ", char)
 
             state = automaton.goto.get((state, char), state and -1)
 
-            print ("State is: ", state)
+            # print ("State is: ", state)
 
             list_L[state] = j
-            print ("List L is: ", list_L)
+            # print ("List L is: ", list_L)
 
             if j == len(kmers[i]) - 1:
-                print ("HEAR")
+                # print ("HEAR")
                 state_F [i] = state
                 inverse_E[state] = i
-                print ("State F is: ", state_F)
-                print ("Inverse E is: ", inverse_E)
-                if state != -1: #state is not leaf 
-                    print (state)
+                # print ("State F is: ", state_F)
+                # print ("Inverse E is: ", inverse_E)
+                if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
+                    # print ("Not leaf situation")
+                    # print (automaton.goto.get(2))
+                    # print (automaton.goto)
+                    # print (state)
                     state_F[i] = 0 
-                    print ("State F is: ", state_F)
+                    # print ("State F is: ", state_F)
             j = j + 1
-    print (automaton.goto)
+    # print (automaton.goto)
 
-    print ("!!!!!!!!!!!!!!!!!!!!")
-    queue = []
+    # print ("!!!!!!!!!!!!!!!!!!!!")
+    queue = [0]
     depth[0] = 0
     pointer_B = 0
-    for (from_state, char), to_state in automaton.goto.items():
-
-            if from_state == 0 and to_state != 0:
-                queue.append(to_state)
-                automaton.fail[to_state] = 0
 
     while queue:
-        print ("Queue")
-        print (queue)
+        # print ("Queue")
+        # print (queue)
         queue_state = queue.pop(0)
         for (from_state, char), to_state in automaton.goto.items():
-            print ("STATES")
+            # print ("STATES")
             if from_state == queue_state:
 
-                print (queue_state)
-                print (to_state)
+                # print ("Queue state: ", queue_state)
+                # print ("To state: ", to_state)
 
                 queue.append(to_state)
                 if depth.get(queue_state) != None:
                     depth[to_state] = int(depth.get(queue_state)) + 1
                 else:
                     depth[to_state] = 1
+                # print ("DEPTH: ", depth)
+
                 link_B[to_state] = pointer_B
                 pointer_B = to_state
                 helper = inverse_E.get(automaton.fail[to_state])
                 if helper != None:
                     state_F[helper] = 0
-                print ("FAIL FUNCTION: ", automaton.fail[to_state])
-                print ("depth is: ", depth)
-                print ("link_B is: ", link_B)
+                # print ("FAIL FUNCTION: ", automaton.fail[to_state])
+                # print ("link_B is: ", link_B)
     
     return (depth, list_L, link_B, state_F, inverse_E)
 
 a = ['aha', "aho", 'aa', 'cora']
 l = "akikiratlea"
 A = Aho_Corasick (a)
-result = processing (a, A)
-print (result)
+(depth, list_L, link_B, state_F, inverse_E) = processing (a, A)
+print ("RESULT")
+print ("Depth: ", depth)
+print ("List L: ", list_L)
+print ("b-link: ", link_B)
+print ("state F: ", state_F)
+print ("inverse of F: ", inverse_E)
