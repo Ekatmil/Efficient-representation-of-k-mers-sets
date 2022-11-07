@@ -168,72 +168,109 @@ def processing(kmers, automaton):
     
     return (depth, list_L, link_B, pointer_B, state_F, inverse_E, automaton)
 
+def initializeForbidden (dict, m):
+    for j in range (0, m):
+        dict[j] = False
+    return dict 
+
 def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     list_P = {}
     forbidden = {}
     first = {}
     last = {}
-    H = []
+    H = {}
+
+    forbidden = initializeForbidden(forbidden,m)
+
     print (state_F)
-    for j in range (0, m):
+    for j in range (0, m): #this lopp initializes new dictionaries. List P is list P(s) = [a], where s is fail state for j in F(a) = j 
+        print ("FIRST FOR LOOP")
         print (j)
-        print ("Get j: ", state_F.get(j))
-        helper_1 = state_F.get(j)
-        if helper_1 != 0:
-            print ("here")
-            print (automaton.fail.get(helper_1))
-            helper = automaton.fail[helper_1]
-            print ("helper is: ", helper)
-            print (j)
+        print ("Get j from F: ", state_F.get(j))
+        helper_1 = state_F.get(j) #F(j)
+        if helper_1 != 0: #F(j) != O
+            print ("F(", j, ") is not 0")
+            helper = automaton.fail[helper_1] #f(F(j))
+            print ("Fail from F(", j, ") go to: ", helper)
             list_P = addMultipleValues(list_P, helper, j)
-            print ("New list is: ", list_P)
+            print ("New list P is: ", list_P)
             first[j] = last[j] = j 
+            print ("first list is: ", first)
+            print ("last list is: ", last)
         else:
+            print ("F(", j, ") is 0")
             forbidden[j] = True
+            print ("Forbidden is: ", forbidden)
     
-    print ("NEW")
-    print (forbidden)
+    print ("RESULTS AFTER FIRST FOR")
+    print ("forbidden: ", forbidden)
+    print ("Last is: ", last)
+    print ("first is: ", first)
+    print ("list P is: ", list_P)
 
     state = link_B.get(pointer_B)
-    print (state)
+
 
     while state != 0:
-        print (state)
-        print (list_P)
-        if list_P.get(state) != None:
-            for state1, list_j in list_L.items():
-                if state1 != state:
+        print ("INSIDE WHILE LOOP")
+        print ("State is: ", state)
+
+        if list_P.get(state) != None: #not empty 
+            print ("", list_P.get(state), "is not empty")
+
+            for state1, list_j in list_L.items(): #for each j in L(s)
+                if state1 != state: #not current state
                     break
-                else: 
+                else: #current state s 
                     for j in list_j:
-                        #here
-                        print (j)
-                        print (forbidden.get(j))
-                        if forbidden.get(j) != None: 
+                        print ("From list L: ", list_L)
+                        print ("Got ", j, " of ", list_j)
+
+                        print ("J in forbidden is: ", forbidden.get(j))
+                        if forbidden.get(j) != None: #such that forbidden(j) == false 
                             if forbidden[j] == False:
-                                i = list_P[state][0]
+                                i = list_P[state][0] #i is the first element of P(s)
+                                print ("", i, " is obtained from list P: ", list_P)
+                                print (i)
                                 if first[i] == j:
                                     if len(list_P[state]) == 1:
                                         break
                                     else:
+                                        print(list_P[state])
                                         i = list_P[state][1]
-                                #H = H + {(xi, xj)}
-                                H.append()
+                                        print (i)
+
+                                H = addMultipleValues(H, i, j)
+                                print ("Hamiltionain path with ", i, "as key and ", j, " as value is: ", H)
                                 forbidden[j] = True
-                                list_P[state] = list_P[state].remove(i)
+                                print ("Forbidden is: ", forbidden)
+
+                                helper_list = list_P[state]
+                                print (helper_list)
+                                print (i)
+                                helper_list.remove(i)
+                                print (helper_list)
+                                list_P[state] = helper_list
+                                print ("List P after removal of ", i, " is: ", list_P)
                                 first[last[j]] = first[i]
                                 last[first[i]] = last[j]  
+                                print ("first: ", first)
+                                print ("last: ", last)
 
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state])
+            print ("New list P is: ", list_P)
         state = link_B[state]    
+        print ("new state is: ", state)
+    return H
 
 a = ['aha', "aho", 'aa', 'cora']
 l = "akikiratlea"
 A = Aho_Corasick (a)
 (depth, list_L, link_B, pointer_B, state_F, inverse_E, automaton) = processing (a, A)
-Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, 4)
+H = Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, 4)
 
 print ("RESULT")
+print (H)
 print ("Depth: ", depth)
 print ("List L: ", list_L)
 print ("b-link: ", link_B)
