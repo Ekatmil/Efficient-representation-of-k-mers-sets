@@ -259,7 +259,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                                 if len(helper_list) == 0:
                                     break
 
-            list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state])
+            list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # FIXME: INSTEAD OF ADDING list_P[state] TO list_P[automaton.fail[state]], DO LIST CONCATENATION
             print ("New list P is: ", list_P)
         state = link_B[state]    
         print ("new state is: ", state)
