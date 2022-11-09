@@ -116,7 +116,7 @@ def processing(kmers, automaton):
 
             # print ("State is: ", state)
 
-            list_L = addMultipleValues (list_L, state, j)
+            list_L = addMultipleValues (list_L, state, i)
             # print ("List L is: ", list_L)
 
             if j == len(kmers[i]) - 1:
@@ -182,7 +182,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     forbidden = initializeForbidden(forbidden,m)
 
-    print (state_F)
+    print ("F is ", state_F)
     for j in range (0, m): #this lopp initializes new dictionaries. List P is list P(s) = [a], where s is fail state for j in F(a) = j 
         print ("FIRST FOR LOOP")
         print (j)
@@ -208,14 +208,14 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     print ("first is: ", first)
     print ("list P is: ", list_P)
 
-    state = link_B.get(pointer_B)
+    state = pointer_B #link_B.get(pointer_B)
 
 
     while state != 0:
         print ("INSIDE WHILE LOOP")
         print ("State is: ", state)
 
-        if list_P.get(state) != None: #not empty 
+        if list_P.get(state) != None and len(list_P.get(state)) > 0: #not empty
             print ("", list_P.get(state), "is not empty")
 
             for state1, list_j in list_L.items(): #for each j in L(s)
@@ -256,6 +256,8 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                                 last[first[i]] = last[j]  
                                 print ("first: ", first)
                                 print ("last: ", last)
+                                if len(helper_list) == 0:
+                                    break
 
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state])
             print ("New list P is: ", list_P)
@@ -263,11 +265,13 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
         print ("new state is: ", state)
     return H
 
-a = ['aha', "aho", 'aa', 'cora']
+a = ['aha', "aho", 'aa', 'cora', 'aaa', 'aaab', 'ab']
 l = "akikiratlea"
 A = Aho_Corasick (a)
+print("goto: ", A.goto)
+print("fail: ", A.fail)
 (depth, list_L, link_B, pointer_B, state_F, inverse_E, automaton) = processing (a, A)
-H = Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, 4)
+H = Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, len(a))
 
 print ("RESULT")
 print (H)
