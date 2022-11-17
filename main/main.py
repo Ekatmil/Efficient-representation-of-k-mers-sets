@@ -7,6 +7,9 @@ from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
 from mask import *
+from HelperFunction_Automaton import *
+from Automaton_Class import *
+from AhoCorasick import *
 
 def_k = 31
 
@@ -50,6 +53,15 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-a',
+    '--aho-corasick',
+    dest='ahoCorasick',
+    help="call for Aho-Corasick",
+    action="store_true",
+    required=False,
+)
+
+parser.add_argument(
     '-b',
     '--bitstring_mask',
     help="call for bitstring mask",
@@ -78,7 +90,7 @@ parser.add_argument(
 config = parser.parse_args(sys.argv[1:])
 
 #if no algorithm chosen
-if not (config.greedy or config.hamiltonian or config.simplitig):
+if not (config.greedy or config.hamiltonian or config.simplitig or config.ahoCorasick):
     parser.error('No algorithm requested, add -g, -s or -gh')
 
 #load fasta
@@ -92,6 +104,9 @@ if config.simplitig == True:
 if config.greedy == True:
     superSet = compute_simplitig(arr, config.k)  #set
     superStr = findSuperStr(superSet)
+if config.ahoCorasick == True:
+    path_H = initialization(list(arr))
+    print (path_H)
 if config.hamiltonian == True:
     print("To be updated")
 
