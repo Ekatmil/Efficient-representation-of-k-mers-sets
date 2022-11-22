@@ -166,8 +166,6 @@ def SuperStrhelper(a, sorted_list):
 
 def FindSuperStr (arr):
     a = list(arr)
-    print (a)
     sorted_list = HamiltonianSort(initialization(a))
-    print (sorted_list)
     resultStr = SuperStrhelper (a, sorted_list)
     return resultStr
