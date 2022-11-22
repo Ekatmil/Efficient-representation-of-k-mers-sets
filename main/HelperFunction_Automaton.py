@@ -60,28 +60,43 @@ def HamiltonianSort (H):
     sorted_list.append(to_add)
     del H[saved]
 
+    # print ("INITIALIZATION")
+    # print ("Saved is: ", saved)
+    # print ("To add is: ", to_add)
+    # print ("New list is: ", sorted_list)
     while len(H) > 0:
+
         if H.get(to_add) != None:
+            # print ("***Add from right")
             to_add_helper = H[to_add]
+            sorted_list.append(to_add_helper)
             del H[to_add]
             to_add = to_add_helper
+            # print ("New to add is: ", to_add)
+            # print ("New list is: ", sorted_list)
         else:
             for key, value in H.items():
                 still_going = False
                 if value == saved:
+                    # print ("***Add from left")
                     sorted_list.insert(sorted_list.index(value), key)
                     #sorted_list = [key] + sorted_list
                     saved = key
                     del H[saved]
                     still_going = True
+                    # print ("New saved is: ", saved)
+                    # print("New list is: ", sorted_list)
                     break
             if still_going != True:
+                # print ("***New cycle")
                 pair = next(iter((H.items())) ) #take the first pair 
                 saved = pair[0] #the key of the first takd pair in case if this pair does not continue
                 to_add = pair[1]
                 sorted_list.append(saved)
                 sorted_list.append(to_add)
                 del H[saved]
-    print (H)
+                # print ("Saved is: ", saved)
+                # print ("To add is: ", to_add)
+                # print ("New list is: ", sorted_list)
     return sorted_list 
 
