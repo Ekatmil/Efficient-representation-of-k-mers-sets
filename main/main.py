@@ -98,6 +98,7 @@ arr = load(config.k, config.input)
 arr_saved = arr.copy()
 
 #algorithms
+print (len(arr))
 if config.simplitig == True:
     superSet = compute_simplitig(arr, config.k)  #set
     superStr = "".join(superSet)
@@ -105,8 +106,7 @@ if config.greedy == True:
     superSet = compute_simplitig(arr, config.k)  #set
     superStr = findSuperStr(superSet)
 if config.ahoCorasick == True:
-    path_H = initialization(list(arr))
-    print (path_H)
+    superStr = FindSuperStr(arr)
 if config.hamiltonian == True:
     print("To be updated")
 
