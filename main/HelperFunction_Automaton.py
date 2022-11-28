@@ -100,3 +100,67 @@ def HamiltonianSort (H):
                 # print ("New list is: ", sorted_list)
     return sorted_list 
 
+# def reverseDictionary (dic):
+#     reverse_dic = {}
+#     for key, value in dic.items():
+#         print ("KEY",key)
+#         print ("VALUE", value)
+#         reverse_dic[value] = key
+#         print ("REERSE:", reverse_dic)
+#     print (reverse_dic)
+#     return (reverse_dic)
+
+# def getToValues (dic1, dic2):
+#     print ("Get To Value")
+#     print (dic2)
+#     print (dic1)
+#     dic3 = reverseDictionary(dic2)
+#     print (dic1)
+#     print (dic3)
+#     shared = {k: dic1[k] for k in dic1 if k in dic3 and dic1[k] == dic3[k]}
+#     print (shared)
+
+
+
+
+def HamiltonianSorthelp (H, first, last):
+    from_array  = [x for x in {k: first[k] for k in first if k in last and first[k] == last[k]}.keys()]
+    keys = H.keys()
+    values = H.values()
+    to_array = [x for x in keys if x not in values]
+
+
+    while len(from_array) > 0:
+        key = from_array.pop(0)
+        value = to_array.pop(0)
+        H[key] = value
+        to_array.append(key)
+
+    return H
+
+    
+
+
+    # extra_array = []
+    # for key, value in last.items():   #of first
+    #     if key == value:
+    #         if len(to_array) > 0: 
+    #             from_v = to_array.pop(0)
+    #             H[key] = from_v
+    #             extra_array.append(from_v)
+    #         else:
+    #             extra_array.append(key)
+
+    # if len(to_array) > 0:
+    #     extra_array.extend(to_array)
+    
+    # for i in range (0, len(extra_array) - 1):
+
+    for key, value in first.items():   #of first
+        if key == value:
+            if key not in from_array:
+              from_v = from_array.pop(0)
+              H[from_v] = value
+
+              
+

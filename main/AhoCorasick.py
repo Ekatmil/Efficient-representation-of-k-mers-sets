@@ -122,8 +122,8 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # P(fail(s)) <- P(fail(s)) * P(s)
 
         state = link_B[state]  # s <- b(s)
-
-    H = AddingAdditionalStr (H, forbidden)
+    #H = AddingAdditionalStr (H, forbidden)
+    H = HamiltonianSorthelp(H, first, last)
     return H
     
 
@@ -134,24 +134,8 @@ a = ["ttt","act", "tag", "gga", "aga", "cga", "tga", "cca", "ttg"]
 
 def initialization (a):   
     A = Aho_Corasick (a)
-    # print ("###################")
-    # print ("AUTOMATON WITH GIVEN SET OF WORDS: ", a)
-    # print("goto: ", A.goto)
-    # print("fail: ", A.fail)
-    # print ("###################")
-    # print ("PROCESSING FUNCTION RESULTS: ")
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-    # print ("Depth: ", depth)
-    # print ("List L: ", list_L)
-    # print ("b-link: ", link_B)
-    # print ("state F: ", state_F)
-    # print ("inverse of F: ", inverse_E)
-    # print ("Pointer B is: ", pointer_B)
-    # print ("###################")
-    # print ("HAMILTONIAN FUNCTION RESULTS: ")
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    # print ("Hamiltonian is: ", H)
-    # print ("###################")
     return H
 
 
