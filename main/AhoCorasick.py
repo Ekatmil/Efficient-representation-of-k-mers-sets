@@ -3,9 +3,11 @@
 from Automaton_Class import *
 from HelperFunction_Automaton import *
 from string_functions import *
+import time
 
 # ALGORITHM 1: PREPROCESSING
 #Input: set of words (kmers) and AC machine wirh goto and fail functions
+
 
 def preprocessing(kmers, automaton):
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
@@ -132,10 +134,22 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 a = ["ttt","act", "tag", "gga", "aga", "cga", "tga", "cca", "ttg"]
 #a = ["klaj", "uku"]
 
-def initialization (a):   
+def initialization (a, st):   
     A = Aho_Corasick (a)
+
+    et = time.time()
+    elapsed_time = et - st
+    print('Automaton is created in ', elapsed_time, 'seconds')
+
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
+    et = time.time()
+    elapsed_time = et - st
+    print('Processing is done in :', elapsed_time, 'seconds')
+
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
+    et = time.time()
+    elapsed_time = et - st
+    print('Hamiltonian is done in :', elapsed_time, 'seconds')
     return H
 
 
@@ -149,7 +163,17 @@ def SuperStrhelper(a, sorted_list):
     return a[sorted_list[len(sorted_list) -1]]
 
 def FindSuperStr (arr):
+    st = time.time()
     a = list(arr)
-    sorted_list = HamiltonianSort(initialization(a))
+    sorted_list = HamiltonianSort(initialization(a, st))
+
+    et = time.time()
+    elapsed_time = et - st
+    print('Initialization is done in :', elapsed_time, 'seconds')
+
     resultStr = SuperStrhelper (a, sorted_list)
+
+    et = time.time()
+    elapsed_time = et - st
+    print('Result is found in :', elapsed_time, 'seconds')
     return resultStr
