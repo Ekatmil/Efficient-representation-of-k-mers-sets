@@ -57,21 +57,16 @@ class Aho_Corasick:
 
         #construction of "inside" fails
         while queue:
-
             queue_state = queue.pop(0)
-
-            for (from_state, char), to_state in self.goto.items():
- 
-                if from_state == queue_state:
-                    queue.append(to_state)
-                    state = self.fail[from_state]
-       
-
-                    while True:
             
+            for char in ["A", "C", "T", "G"]:
+                res1 = self.goto.get((queue_state, char), -1)
+                if res1 != -1:
+                    queue.append(res1)
+                    state = self.fail[queue_state]
+                    while True:
                         res = self.goto.get((state, char), state and -1)
                         if res != -1:
                             break
                         state = self.fail[state]
-
-                    self.fail[to_state] = res
+                    self.fail[res1] = res
