@@ -41,25 +41,23 @@ def preprocessing(kmers, automaton):
     while queue:
         queue_state = queue.pop(0) #let r be the next state in queue; queue <- queue - r
 
-        for (from_state, char), to_state in automaton.goto.items(): # for each s such that goto (r, a) = s for some a
-
-            if from_state == queue_state:
-
-                queue.append(to_state) #queue <- queue * s
-                if depth.get(queue_state) != None: 
-                    depth[to_state] = int(depth.get(queue_state)) + 1 # d(s) <- d(r) + 1
+        for char in ["A", "C", "T", "G"]:
+            res = automaton.goto.get((queue_state, char), -1)
+            if res!= -1:
+                queue.append(res)
+                if depth.get(queue_state) != None:
+                    depth[res] = int(depth.get(queue_state)) + 1 # d(s) <- d(r) + 1
                 else:
-                    depth[to_state] = 1
+                    depth[res] = 1
 
 
-                link_B[to_state] = pointer_B #b(s) <- B
-                pointer_B = to_state # B <- s
+                link_B[res] = pointer_B #b(s) <- B
+                pointer_B = res # B <- s
                 
-                helper = inverse_E.get(automaton.fail[to_state]) # F(E(fail(s))) <- 0
+                helper = inverse_E.get(automaton.fail[res]) # F(E(fail(s))) <- 0
                 if helper != None:
                     state_F[helper] = 0
 
-    
     return (list_L, link_B, pointer_B, state_F)
 
 # ALGORITHM 2: Construction of H 
@@ -126,6 +124,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
         state = link_B[state]  # s <- b(s)
     #H = AddingAdditionalStr (H, forbidden)
     H = HamiltonianSorthelp(H, first, last)
+    #H = HamiltonianSort (H)
     return H
     
 
@@ -137,19 +136,9 @@ a = ["ttt","act", "tag", "gga", "aga", "cga", "tga", "cca", "ttg"]
 def initialization (a, st):   
     A = Aho_Corasick (a)
 
-    et = time.time()
-    elapsed_time = et - st
-    print('Automaton is created in ', elapsed_time, 'seconds')
-
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-    et = time.time()
-    elapsed_time = et - st
-    print('Processing is done in :', elapsed_time, 'seconds')
 
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    et = time.time()
-    elapsed_time = et - st
-    print('Hamiltonian is done in :', elapsed_time, 'seconds')
     return H
 
 
@@ -167,13 +156,9 @@ def FindSuperStr (arr):
     a = list(arr)
     sorted_list = HamiltonianSort(initialization(a, st))
 
-    et = time.time()
-    elapsed_time = et - st
-    print('Initialization is done in :', elapsed_time, 'seconds')
-
     resultStr = SuperStrhelper (a, sorted_list)
 
     et = time.time()
     elapsed_time = et - st
-    print('Result is found in :', elapsed_time, 'seconds')
+    print('Result is in :', elapsed_time, 'seconds')
     return resultStr
