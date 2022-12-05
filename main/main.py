@@ -10,9 +10,12 @@ from mask import *
 from HelperFunction_Automaton import *
 from Automaton_Class import *
 from AhoCorasick import *
+import time
+from testStr import *
 #from test import *
 
 def_k = 31
+st = time.time()
 
 parser = argparse.ArgumentParser(description="")
 
@@ -97,6 +100,7 @@ if not (config.greedy or config.hamiltonian or config.simplitig or config.ahoCor
 #load fasta
 arr = load(config.k, config.input)
 arr_saved = arr.copy()
+print ("LENGTH OF LOADED SEQ IS: ", len(arr))
 
 #algorithms
 if config.simplitig == True:
@@ -109,6 +113,8 @@ if config.ahoCorasick == True:
     superStr = FindSuperStr(arr)
 if config.hamiltonian == True:
     print("To be updated")
+
+print ("LENGTH OF SUPERSTR IS: ", len(superStr))
 
 #mask and output 
 
@@ -132,3 +138,10 @@ else:
         output_file.close()
     else:
         print(superStrMask)
+
+print ()
+print("TEST")
+if config.bitstring == True:
+    testAll(superStr, list(arr_saved), config.k, superStrMask)
+else:
+    testAll(superStrMask, list(arr_saved), config.k)
