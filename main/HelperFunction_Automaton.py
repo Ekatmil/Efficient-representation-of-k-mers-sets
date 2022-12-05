@@ -100,32 +100,6 @@ def HamiltonianSort (H):
                 # print ("New list is: ", sorted_list)
     return sorted_list 
 
-# def reverseDictionary (dic):
-#     reverse_dic = {}
-#     for key, value in dic.items():
-#         print ("KEY",key)
-#         print ("VALUE", value)
-#         reverse_dic[value] = key
-#         print ("REERSE:", reverse_dic)
-#     print (reverse_dic)
-#     return (reverse_dic)
-
-
-
-# def HamiltonianSorthelp (H, first, last):
-#     from_array  = [x for x in {k: first[k] for k in first if k in last and first[k] == last[k]}.keys()]
-#     keys = H.keys()
-#     values = H.values()
-#     to_array = [x for x in keys if x not in values]
-
-
-#     while len(from_array) > 0:
-#         key = from_array.pop(0)
-#         value = to_array.pop(0)
-#         H[key] = value
-#         to_array.append(key)
-
-#     return H
 
 
 # A bit faster version than function above
@@ -153,7 +127,4 @@ def HamiltonianSorthelp (H, first, last):
         to_array.append(key)
 
     return H
-
-
-
 
