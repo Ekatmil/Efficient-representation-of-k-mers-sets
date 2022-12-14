@@ -9,10 +9,17 @@ class Aho_Corasick:
         self.fail_function()
 
     def isLeaf (self, state):
-        for (from_state, char), to_state in self.goto.items():
-            if state == from_state:
+        for char in ["A", "C", "T", "G"]:
+            res1 = self.goto.get((state, char), -1)
+            if res1 != -1:
                 return False
         return True
+
+
+        # for (from_state, char), to_state in self.goto.items():
+        #     if state == from_state:
+        #         return False
+        # return True
 
 
     #CONSTRUCTION OF GOTO FUNCTION (Algo 2)
@@ -49,11 +56,17 @@ class Aho_Corasick:
         queue = []
 
         #store all "first" states into the queue 
-        for (from_state, char), to_state in self.goto.items():
+        for char in ["A", "C", "T", "G"]:
+            res1 = self.goto.get((0,char), -1)
+            if res1 > 0:
+                queue.append(res1)
+                self.fail[res1] = 0
 
-            if from_state == 0 and to_state != 0:
-                queue.append(to_state)
-                self.fail[to_state] = 0
+
+        # for (from_state, char), to_state in self.goto.items():
+        #     if from_state == 0 and to_state != 0:
+        #         queue.append(to_state)
+        #         self.fail[to_state] = 0
 
         #construction of "inside" fails
         while queue:

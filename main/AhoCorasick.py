@@ -9,7 +9,8 @@ import time
 #Input: set of words (kmers) and AC machine wirh goto and fail functions
 
 
-def preprocessing(kmers, automaton):
+def preprocessing(kmers, automaton, st):
+    print ("PREPROCESSING")
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
     state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
     inverse_E = {} #dictionary E is inverse of F
@@ -34,6 +35,7 @@ def preprocessing(kmers, automaton):
 
             j = j + 1
 
+    print (">>>>FIRST FOR LOOP IS DONE IN: ",time.time() - st)
     queue = [0]
     depth[0] = 0
     pointer_B = 0
@@ -136,9 +138,10 @@ a = ["ttt","act", "tag", "gga", "aga", "cga", "tga", "cca", "ttg"]
 def initialization (a, st):   
     A = Aho_Corasick (a)
 
-    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-
+    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
+    print ("PREPROCESSING IS DONE IN: ", time.time() - st)
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
+    print ("HAMILTONIAN IS DONE IN: ", time.time() - st)
     return H
 
 
