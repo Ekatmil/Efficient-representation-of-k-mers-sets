@@ -32,7 +32,7 @@ Contains function ***def load(k, fileName)***, where *k* is the parsed integer k
 		2) For each record in sequence: record is split into kmers 
 		3) Add each obtained kmer to the dictionary 
  **Output**:
- Dictionary of kmers obtained from the input fasta file
+ Dictionary of kmers obtained from the input fasta file.
 
 ### [mask.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/mask.py)
 Script for finding the corresponding mask.
@@ -74,7 +74,7 @@ Script to check the correctness of the output of main.py
  - *st* is superstring
  - *lst* is list of kmers 
 		
- To check if all kmers are precented in the mask
+ To check if all kmers are precented in the mask.
  ##### Algorithm [allKmers]:
 		1) Helper variables:
 			st_helper is superstring with all its characters being capital
@@ -86,14 +86,14 @@ Script to check the correctness of the output of main.py
 		5) End of for loop (2): print message according to the checker
 			
   **Output**:
-   True if all kmers are presented and False otherwise
+   True if all kmers are presented and False otherwise.
 		
 - [**def noDifferentStr (st, lst, k)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/testStr.py#L22), where
  - *st* is superstring
  - *lst* is list of kmers
  - *k* is integer k
 		
- To check if there are no false kmers in the superstring
+ To check if there are no false kmers in the superstring.
   ##### Algorithm [noDifferentStr]:
 		1) Set checker to True
 		2) For all characters in subset of superstring (superstring without last k - 1 chars) run:
@@ -105,12 +105,12 @@ Script to check the correctness of the output of main.py
  - *st* is superstring
  - *bn* is bitstring
 		
- To create superstring with default mask from the bitstring mask
+ To create superstring with default mask from the bitstring mask.
  ##### Algorithm [applyMask]:
  		Lower all chars of st that are represented by 0 in the bn 
 		
   **Output**:
- Superstring with default mask
+ Superstring with default mask.
 			
 - [**def testAll (st, lst, k, *bn)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/testStr.py#L48), where
 	- *st* is superstring 
@@ -118,22 +118,22 @@ Script to check the correctness of the output of main.py
 	- *k* is integer k 
 	-  **bn* is bitstring. Not Required
 		
- To tests everything. Called in main.py
+ To tests everything. Called in main.py.
  ##### Algorithm [testAll]:
 		1) Check if bn is given. If given, then applyMask (st, bn)
 		2) run allKmers (st, lst)
 		3) run noDifferentStr (st, lst, k)
 		
   **Output**:
-  Messages with the information about correctness of the superstring and its mask
+  Messages with the information about correctness of the superstring and its mask.
 		
 
 
 ## ALGORITHMS
 
 ### [Aho-Corasick](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/literature/A%20Linear-Time%20Algorithm%20for%20Finding%20Approximate%0AShortest%20Common%20Superstrings.pdf)
-A Linear-Time Algorithm for Finding Approximate Shortest Common Superstrings
-Called in main.py with algumener -a/--aho-corasick
+A Linear-Time Algorithm for Finding Approximate Shortest Common Superstrings.
+Called in main.py with algumener -a/--aho-corasick.
 	
 
 #### [Automaton_Class.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/Automaton_Class.py)
@@ -177,7 +177,7 @@ Creation of the automaton from the given set of word with goto function and fail
 	Algorithm 3 [page 336](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/literature/Efficient%20String%20Matching:%20An%20Aid%20to%20Bibliographic%20Search.pdf)
 			
 - [**def isLeaf (self, state)**:](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/Automaton_Class.py#L11)
-	Function to check if the state is a leaf in automaton 
+	Function to check if the state is a leaf in automaton.
 		
 	##### Algorithm [isLeaf]:
 		1) For all character ['A', 'C', 'T', 'G'] result = goto (state, char)
@@ -185,10 +185,10 @@ Creation of the automaton from the given set of word with goto function and fail
 		3) End of for loop (1). Return True
 		
 	**Output**:
-	 True if state is leaf and False o/w
+	 True if state is leaf and False o/w.
 	 
 #### [AhoCorasick.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/AhoCorasick.py)
-Algorithm that finds the shortest superstring using Aho-Corasick machine
+Algorithm that finds the shortest superstring using Aho-Corasick machine.
 	
  ##### [PREPROCESSING](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/AhoCorasick.py#L12)
  Algorithm 1 [page 319](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/literature/A%20Linear-Time%20Algorithm%20for%20Finding%20Approximate%0AShortest%20Common%20Superstrings.pdf)
@@ -197,7 +197,7 @@ Algorithm that finds the shortest superstring using Aho-Corasick machine
 	- *kmers* is list of kmers 
 	- *automaton* is Aho-Corasick machine created from kmers
 		
- Is a preprocessing phase that augments the usual AC machine with the necessary additional functions
+ Is a preprocessing phase that augments the usual AC machine with the necessary additional functions.
 		
 **Output**:
  -  *list_L* : dictionary of the supporters for each state. In form a:b, where
@@ -222,34 +222,34 @@ Algorithm 2 [page 320](https://github.com/Ekatmil/Efficient-representation-of-k-
 		
  Function implements the actual greedy heuristics. Construction of *H* path.
 **Output**:
-	A Hamiltonian path H is the overlap string of reduced kmers set
+	A Hamiltonian path H is the overlap string of reduced kmers set.
 			 
 ##### [FINDING SUPERSTRING](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/AhoCorasick.py#L137) 
-Three functions which provide the output superstring 
+Three functions which provide the output superstring.
 		
  - **def initialization (a)**, which takes list a of kmers
-	######Algorithm [initialization]:
+	###### Algorithm [initialization]:
 		1) Create Aho-Corasick machine
 		2) Run preprocessing
 		3) Run hamiltonian
 	**Output**:
-	Path H (output of def hamiltomian)
+	Path H (output of def hamiltomian).
 		
-- **def SuperStrhelper (a, sorted_list)**, where *a* is list of kmers and sorted_list obtained from HamiltonianSort function (HelperFunction_Automaton.py) and is list of ordered strings from *H*
+- **def SuperStrhelper (a, sorted_list)**, where *a* is list of kmers and sorted_list obtained from HamiltonianSort function (HelperFunction_Automaton.py) and is list of ordered strings from *H*.
 		
-	######Algorithm [SuperStrhelper]:
+	###### Algorithm [SuperStrhelper]:
 		1) For each string in sorted_list (not including the last one) overlap with the successor string using overlap function (string_functions.py)
 		2) Get the merge string of two strings 
 		3) Change the second taken string in the kmers to the merge string 
 		4) End of for loop (1)
 				
 	**Output**:
-	Superstring  
+	Superstring.
 		
 - **def FindSuperStr (arr)**, where *arr* is set of kmers
 	This function is called from main.py
 			
-	######Algorithm [FindSuperStr]:
+	###### Algorithm [FindSuperStr]:
 		1) Set arr into list 
 		2) Obtain sorted_list by HamiltonianSort(initialization( list(arr)))
 		3) Obtain resultStr by SuperStrhelper (list(arr), sorted_list) 
@@ -258,8 +258,8 @@ Three functions which provide the output superstring
 				
 		
  ### Greedy
- Greddy Algorithm to find any superstring from given set of kmers
- Called in main.py with algumener -g/--greedy
+ Greddy Algorithm to find any superstring from given set of kmers.
+ Called in main.py with algumener -g/--greedy.
 	
 ##### [GreedyApproximation.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/Greedy_Approxination.py)
 Contains function finsSuperStr(arr), which takes the set *arr*, obtained from the compute_simplitig(kmerSet, k) (simplitig.py)
@@ -275,7 +275,7 @@ Contains function finsSuperStr(arr), which takes the set *arr*, obtained from th
 	8) End of while loop (1)
 		
  **Output**: 
-	The first element of *arr* which is superstring
+	The first element of *arr* which is superstring.
 
 ### [Simplitig](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/literature/Simplitigs%20as%20an%20efficient%20and%20scalable%0Arepresentation%20of%20de%20Bruijn%20graphs.pdf)
 
@@ -286,30 +286,30 @@ Contains function finsSuperStr(arr), which takes the set *arr*, obtained from th
  Helper Functions for the AhoCorasick.py
  
 - [**def addMultipleValues (dict, key, value)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/HelperFunction_Automaton.py#L2) 
-	Function to store multiple values with one key (for example, list_L)
+	Function to store multiple values with one key (for example, list_L).
 	Takes dictionary, key and value.
 	#### Algorithm [addMultipleValues]:
 		1) If key is not in dictionary then add key to dictionary with empty list as value
 		2) If type of input values is list, then append each element to the list corresponding to key 
 		3) Else add value to the list corresponding to the key
 	**Output**: 
-	Dictionary
+	Dictionary.
 	
 - [**def sortDict (dict)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/HelperFunction_Automaton.py#L14)  
-	Function to sort dictionary by key in reverse order
-	Takes dictionary as input 
-	Returns sorted dictionary 
-	***NOTE***: not used 
+	Function to sort dictionary by key in reverse order.
+	Takes dictionary as input. 
+	Returns sorted dictionary. 
+	***NOTE***: not used. 
 	
 - [**def initializeForbidden (dict, m)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/HelperFunction_Automaton.py#L22) 
-	Helper function for def HamiltonianSort
-	Stores False value to every key in dictionary 
-	Returns dictionary 
+	Helper function for def HamiltonianSort.
+	Stores False value to every key in dictionary. 
+	Returns dictionary.
 		
 - [**def HamiltonianSort (H)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/HelperFunction_Automaton.py#L54) 
-	Input: Hamiltonian path *H*
-	Function sorts Hamiltonian path according to merge order of strings  
-	Used in AhoCorasick.py def FindSuperStr
+	Input: Hamiltonian path *H*.
+	Function sorts Hamiltonian path according to merge order of strings.  
+	Used in AhoCorasick.py def FindSuperStr.
 		
   ##### Algorithm [HamiltonianSort]:
 		1) Set values:
@@ -331,13 +331,13 @@ Contains function finsSuperStr(arr), which takes the set *arr*, obtained from th
 		13) End of while loop (3)
 			
  **Output**:
-	Sorted list
+	Sorted list.
 ### [string_functions.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/string_functions.py)
-Script with overlap functions
+Script with overlap functions.
 	
-- [**def overlap (str1, str2)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/string_function.py#L4), where *str1* and *str2* are two strings 
+- [**def overlap (str1, str2)**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/string_function.py#L4), where *str1* and *str2* are two strings. 
 		
-	THE ORDER OF STRINGS IN INPUT IS IMPORTANT
+	THE ORDER OF STRINGS IN INPUT IS IMPORTANT.
 		
 	##### Algorithm [overlap]:
 		1) Set maxOverlap to minimum
@@ -351,7 +351,7 @@ Script with overlap functions
 			b) str2 is substring of str1 
 			c) o/w
 		
-	**Output:**
+	**Output**:
 	List [prefix, overlap, suffix, maxOverlap], where
 	- *prefix* + *overlap* + *suffix* is the overlaped string of *str1* and *str2*
 	- *prefix* + *overlap* = *str1*
@@ -362,7 +362,7 @@ Script with overlap functions
 	THE ORDER OF THE STRINGS IN INPUT IS NOT IMPORTANT
 	
 	##### Algorithm [betterOverlap]:
-	Function calls overlap(str1, str2) and overlap(str2, str1) and compares their maxOverlap in order to choose the larger one
+		Function calls overlap(str1, str2) and overlap(str2, str1) and compares their maxOverlap in order to choose the larger one
 		
 	**Output**:
 	Result of overlap (str1, str2) is its larger of equal then overlap (str2, str1) and reslut of overlap (str2, str1) o/w
