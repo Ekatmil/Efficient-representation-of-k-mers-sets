@@ -91,36 +91,34 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     while state != 0:
 
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
-###FIX
-            for state1, list_j in list_L.items(): #for each j in L(s)
-                if state1 == state:
-                    for j in list_j:
 
+            list_j = list_L.get(state) 
+            for j in list_j:
+                
+                if forbidden.get(j) != None: #such that forbidden(j) == False  (word is not subword)
+                    if forbidden[j] == False:
+                        i = list_P[state][0] #i is the first element of P(s)
 
-                        if forbidden.get(j) != None: #such that forbidden(j) == False  (word is not subword)
-                            if forbidden[j] == False:
-                                i = list_P[state][0] #i is the first element of P(s)
+                        if first[i] == j: 
+                            if len(list_P[state]) == 1: #if P(s) has only element then goto next
+                                break
+                            else:
+                                i = list_P[state][1] # i is the second element of P(s)
 
-                                if first[i] == j: 
-                                    if len(list_P[state]) == 1: #if P(s) has only element then goto next
-                                        break
-                                    else:
-                                        i = list_P[state][1] # i is the second element of P(s)
+                        H[i] = j #H <- H * {(Xi, Xj)}
+                        forbidden[j] = True
 
-                                H[i] = j #H <- H * {(Xi, Xj)}
-                                forbidden[j] = True
+                    # P(s) <- P(s) - {i}
+                        helper_list = list_P[state]
+                        helper_list.remove(i)
+                        list_P[state] = helper_list
 
-                                # P(s) <- P(s) - {i}
-                                helper_list = list_P[state]
-                                helper_list.remove(i)
-                                list_P[state] = helper_list
+                        first[last[j]] = first[i] # FIRST(LAST(j)) <- FIRST(i)
+                        last[first[i]] = last[j] # LAST(FIRST(i)) <- LAST(j)
 
-                                first[last[j]] = first[i] # FIRST(LAST(j)) <- FIRST(i)
-                                last[first[i]] = last[j] # LAST(FIRST(i)) <- LAST(j)
-
-                                #NOTE: to prevent IndexError: list index out of range
-                                if len(helper_list) == 0:
-                                    break
+                        #NOTE: to prevent IndexError: list index out of range
+                        if len(helper_list) == 0:
+                            break
             #next
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # P(fail(s)) <- P(fail(s)) * P(s)
 
