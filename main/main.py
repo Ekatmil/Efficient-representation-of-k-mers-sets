@@ -26,7 +26,7 @@ parser.add_argument(
     type=int,
     default=def_k,
     help='',
-    required=True,
+    required=False,
 )
 
 parser.add_argument(

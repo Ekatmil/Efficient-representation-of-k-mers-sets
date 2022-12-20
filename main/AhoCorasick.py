@@ -32,6 +32,7 @@ def preprocessing(kmers, automaton, st):
 
                 if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
                     state_F[i] = 0 # F(i) <- 0 
+                #print ("ONE LOOP: ", time.time() - st)
 
             j = j + 1
 
@@ -90,7 +91,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     while state != 0:
 
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
-
+###FIX
             for state1, list_j in list_L.items(): #for each j in L(s)
                 if state1 == state:
                     for j in list_j:
@@ -125,8 +126,8 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
         state = link_B[state]  # s <- b(s)
     #H = AddingAdditionalStr (H, forbidden)
-    H = HamiltonianSorthelp(H, first, last)
-    #H = HamiltonianSort (H)
+    # H = HamiltonianSorthelp(H, first, last)
+
     return H
     
 
@@ -135,9 +136,9 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 a = ["ttt","act", "tag", "gga", "aga", "cga", "tga", "cca", "ttg"]
 #a = ["klaj", "uku"]
 
-def initialization (a, st):   
+def initialization (a, st):
     A = Aho_Corasick (a)
-
+    print ("Automaton is created: ", time.time() - st)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
     print ("PREPROCESSING IS DONE IN: ", time.time() - st)
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
@@ -158,9 +159,7 @@ def FindSuperStr (arr):
     st = time.time()
     a = list(arr)
     sorted_list = HamiltonianSort(initialization(a, st))
-
     resultStr = SuperStrhelper (a, sorted_list)
-
     et = time.time()
     elapsed_time = et - st
     print('Result is in :', elapsed_time, 'seconds')
