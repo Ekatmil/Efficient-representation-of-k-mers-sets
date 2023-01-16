@@ -10,7 +10,6 @@ def addMultipleValues (dict, key, value):
     return dict
 
 #Function to sort dictionary by key in reverse order 
-#NOTE: probably useless 
 def sortDict (dict):
     dict1 = {}
     keylist = list(dict.keys())
@@ -18,38 +17,43 @@ def sortDict (dict):
     for key in keylist[::-1]: #reverse
         dict1[key] = dict[key]
     return (dict1)
-#Function that store False for every key in "forbidden" dictionary 
+
+#Function that stores False for every key in "forbidden" dictionary 
 def initializeForbidden (dict, m):
     for j in range (0, m):
         dict[j] = False
     return dict 
 
+#Function that removes from dictionary with multiple values for one key 
+def removeFromDict (dic, state, i):
+    helper_list = dic[state]
+    helper_list.remove(i)
+    dic[state] = helper_list
+    return dic
 
-# #Function that adds to path additional non used words
-# #NOTE: function fails when where are no a such that H[a] != None and forbidden(a) = False
-# def AddingAdditionalStr (H, forbidden):
-#     from_list = []
-#     to_list = []
-#     for ind, bo in forbidden.items():
+#Used by TGREEDY
+#Function takes list of staring indices and path H and outputs the list of order 
+def ConnectStr (arr):
+    H = arr[0]
+    C = arr[1]
+    print (C)
+    sorted_list = []
+    while len(C) != 0:
+        ind = C.pop()
+        sorted_list.append(ind)
+        key = H.get(ind)
+        del H[ind]
+        
+        while True:
+            new_key = H.get(key)
+            if new_key == None:
+                break
+            sorted_list.append(key)
+            del H[key]
+            key = new_key
+    return sorted_list
 
-#         if bo == False:
-#             if H.get(ind) == None: #exist
-#                 from_list.append(ind)
-#             to_list.append(ind)
-
-#     while len(from_list) != 0:
-#         for i in to_list:
-#             if i not in from_list:
-#                 H[from_list[0]] = i
-#                 from_list.remove(from_list[0])
-#                 to_list.remove(i)
-
-#     # #NOTE: check this out. If necessary and if enough 
-#     # if len(to_list) >= 2:
-#     #     if H.get(to_list[0]) == None and H.get(to_list[1]) != None: #both not keys 
-#     #      H[to_list[0]] = to_list[1]
-#     return H
-
+#Function that inverts the dictionary such value is a key and key is a value
 def InverseDictionary (dic):
     inverse_dic = {}
     for key, value in dic.items():
@@ -136,7 +140,6 @@ def HamiltonianSorthelp (H, first, last):
     keys = H.keys()
     values = H.values()
     to_array = [x for x in keys if x not in values]
-
 
     while len(from_array) > 0:
         key = from_array.pop(0)
