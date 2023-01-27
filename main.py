@@ -121,7 +121,9 @@ def call():
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = findSuperStr(superSet)
     if config.ahoCorasick == True:
-        superStr = FindSuperStr(arr)
+        superSet = FindSuperStr (arr)
+        superStr = "".join(superSet)
+        # superStr = FindSuperStr(arr)
     if config.tgreedy == True:
         superStr = FindSuperStrTgreedy(arr)
 
