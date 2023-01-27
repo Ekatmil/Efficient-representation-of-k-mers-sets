@@ -40,14 +40,6 @@ def call():
         required=False,
     )
 
-    parser.add_argument(
-        '-gh',
-        '--hamiltonian',
-        help="call for Greedy Hamiltonian",
-        dest='hamiltonian',
-        action="store_true",
-        required=False,
-    )
 
     parser.add_argument(
         '-g',
@@ -62,7 +54,7 @@ def call():
         '-a',
         '--aho-corasick',
         dest='ahoCorasick',
-        help="call for Aho-Corasick",
+        help="call for linear-time implementation of Greedy using the Aho_Corasick automaton",
         action="store_true",
         required=False,
     )
@@ -102,11 +94,19 @@ def call():
         required=False,
     )
 
+    parser.add_argument(
+        '-T',
+        '--test',
+        dest='test',
+        help="Run tests on superstr",
+        action="store_true",
+        required=False,
+    )
     config = parser.parse_args(sys.argv[1:])
 
     #if no algorithm chosen
-    if not (config.greedy or config.hamiltonian or config.simplitig or config.ahoCorasick or config.tgreedy):
-        parser.error('No algorithm requested, add -g, -s, -a, -t or -gh')
+    if not (config.greedy or config.simplitig or config.ahoCorasick or config.tgreedy):
+        parser.error('No algorithm requested, add -g, -s, -a, or -t')
 
     #load fasta
     arr = load(config.k, config.input)
@@ -124,8 +124,7 @@ def call():
         superStr = FindSuperStr(arr)
     if config.tgreedy == True:
         superStr = FindSuperStrTgreedy(arr)
-    if config.hamiltonian == True:
-        print("To be updated")
+
 
     print ("LENGTH OF SUPERSTR IS: ", len(superStr))
 
@@ -152,12 +151,13 @@ def call():
         else:
             print(superStrMask)
 
-    # print ()
-    # print("TEST")
-    # if config.bitstring == True:
-    #     testAll(superStr, list(arr_saved), config.k, superStrMask)
-    # else:
-    #     testAll(superStrMask, list(arr_saved), config.k)
+    if config.test == True:
+        print ()
+        print("TEST")
+        if config.bitstring == True:
+            testAll(superStr, list(arr_saved), config.k, superStrMask)
+        else:
+            testAll(superStrMask, list(arr_saved), config.k)
 
 if __name__ == '__main__':
     call()

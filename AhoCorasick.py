@@ -94,7 +94,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
             list_j = list_L.get(state) 
             for j in list_j:
-                
+
                 if forbidden.get(j) != None: #such that forbidden(j) == False  (word is not subword)
                     if forbidden[j] == False:
                         i = list_P[state][0] #i is the first element of P(s)
@@ -119,13 +119,13 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                         #NOTE: to prevent IndexError: list index out of range
                         if len(helper_list) == 0:
                             break
+
             #next
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # P(fail(s)) <- P(fail(s)) * P(s)
 
         state = link_B[state]  # s <- b(s)
     #H = AddingAdditionalStr (H, forbidden)
     # H = HamiltonianSorthelp(H, first, last)
-
     return H
     
 
@@ -156,7 +156,8 @@ def SuperStrhelper(a, sorted_list):
 def FindSuperStr (arr):
     st = time.time()
     a = list(arr)
-    sorted_list = HamiltonianSort(initialization(a, st))
+    H = initialization (a, st)
+    sorted_list = HamiltonianSort(H)
     resultStr = SuperStrhelper (a, sorted_list)
     et = time.time()
     elapsed_time = et - st

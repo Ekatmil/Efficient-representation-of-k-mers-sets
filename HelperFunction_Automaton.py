@@ -1,4 +1,6 @@
+from blist import *
 # Function to store multiple values with one key 
+
 def addMultipleValues (dict, key, value): 
     if key not in dict:
         dict[key] = list()
@@ -40,17 +42,23 @@ def ConnectStr (arr):
     sorted_list = []
     while len(C) != 0:
         ind = C.pop()
+        # print ("Index is: ", ind)
         sorted_list.append(ind)
         key = H.get(ind)
-        del H[ind]
+        # print ("Next key from Index is: ", key)
+        # print ("Sorted list: ", sorted_list)
         
         while True:
             new_key = H.get(key)
+            # print ("New Key is: ", new_key)
             if new_key == None:
                 break
             sorted_list.append(key)
+            # print ("Sorted list is: ", sorted_list)
             del H[key]
             key = new_key
+    print (len(H))
+    print (len(sorted_list))
     return sorted_list
 
 #Function that inverts the dictionary such value is a key and key is a value
@@ -62,6 +70,7 @@ def InverseDictionary (dic):
 
 #Function that sorts Hamiltonian path and outpouts list with the order of strings to merge
 def HamiltonianSort (H):
+    reversed = False 
     sorted_list = []
     pair = next(iter((H.items())) ) #take the first pair 
     saved = pair[0] #the key of the first takd pair in case if this pair does not continue
@@ -72,9 +81,13 @@ def HamiltonianSort (H):
     inverse_H = InverseDictionary(H)
 
     while len(H) > 0:
+        print (len(H))
+        print (to_add)
         if H.get(to_add) != None:
-            # print ("***Add from right")
             to_add_helper = H[to_add]
+            if reversed:
+                sorted_list = reverse_list(sortDict)
+                reversed = False
             sorted_list.append(to_add_helper)
             del H[to_add]
             if inverse_H.get(to_add_helper) != None:
@@ -86,42 +99,42 @@ def HamiltonianSort (H):
             still_going = False
             key = inverse_H.get(saved, -1)
             if key != -1:
-                sorted_list.insert(sorted_list.index(saved), key)
+                sorted_list = reverse_list(sorted_list)
+                reversed = True
+                sorted_list.append(key)
+                # sorted_list.insert(sorted_list.index(saved), key)
                 saved = key
                 del H[saved]
                 if inverse_H.get(to_add) != None:
                     del inverse_H[key]
                 still_going = True
             
-            if still_going != True:       
-            # print ("***New cycle")
+            if still_going != True:
                 pair = next(iter((H.items())) ) #take the first pair 
                 saved = pair[0] #the key of the first takd pair in case if this pair does not continue
                 to_add = pair[1]
+                # pair = list(H.items())[0]
+                # saved = pair[0]
+                # to_add = pair[1]
+                # print (to_add)
+                if reversed:
+                    sorted_list = reverse_list(sorted_list)
+                    reversed = False
                 sorted_list.append(saved)
                 sorted_list.append(to_add)
                 del H[saved]
                 if inverse_H.get(to_add) != None:
                     del inverse_H[to_add]
-            # for key, value in H.items(): #inverse of H value^ key 
-            #     still_going = False
-            #     if value == saved:
-            #         # print ("***Add from left")
-            #         sorted_list.insert(sorted_list.index(value), key)
-            #         #sorted_list = [key] + sorted_list
-            #         saved = key
-            #         del H[saved]
-            #         still_going = True
-            #         # print ("New saved is: ", saved)
-            #         # print("New list is: ", sorted_list)
-            #         break
-            # if still_going != True:
-
-                # print ("Saved is: ", saved)
-                # print ("To add is: ", to_add)
-                # print ("New list is: ", sorted_list)
     return sorted_list 
 
+
+
+def reverse_list(l):
+    for i in range(int(len(l)/2)):
+        beginning = i
+        end = -i-1
+        l[beginning], l[end] = l[end], l[beginning]
+    return l
 
 
 # A bit faster version than function above

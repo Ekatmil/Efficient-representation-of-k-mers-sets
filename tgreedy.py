@@ -86,18 +86,17 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     C = []
 
     while state != 0:
-
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
 
             list_j = list_L.get(state) 
             for j in list_j:
-                
+
                 if forbidden.get(j) != None: #such that forbidden(j) == False  (word is not subword)
                     if forbidden[j] == False:
                         i = list_P[state][0] #i is the first element of P(s)
-                        
-                        if first[i] == j: #close a cycle
-                            print ("Cycle")
+
+                        if first[i] == j: 
+                            # print ("Cycle")
                             C.append(j)
                             list_P = removeFromDict (list_P, state, i)
                             forbidden[j] = True
@@ -110,17 +109,31 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                         H[i] = j #H <- H * {(Xi, Xj)}
                         forbidden[j] = True
 
-                        list_P = removeFromDict(list_P, state, i)
-                        if list_P.get(state) == None:
-                            break
+                    # P(s) <- P(s) - {i}
+                        helper_list = list_P[state]
+                        helper_list.remove(i)
+                        list_P[state] = helper_list
 
                         first[last[j]] = first[i] # FIRST(LAST(j)) <- FIRST(i)
                         last[first[i]] = last[j] # LAST(FIRST(i)) <- LAST(j)
+                        if list_P.get(state) == None:
+                            break
+                        #NOTE: to prevent IndexError: list index out of range
+                        if len(helper_list) == 0:
+                            break
 
             #next
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # P(fail(s)) <- P(fail(s)) * P(s)
 
         state = link_B[state]  # s <- b(s)
+    print ("First :", first)
+    print ("Last: ", last)
+    print ("Forbidden: ", forbidden)
+    print ("C Is: ", C)
+    for (key,value) in first.items():
+        if key == value:
+            if key not in C:
+                C.append(key)
     return [H,C]
     
 
