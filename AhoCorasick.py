@@ -35,8 +35,6 @@ def preprocessing(kmers, automaton, st):
                 #print ("ONE LOOP: ", time.time() - st)
 
             j = j + 1
-
-    print (">>>>FIRST FOR LOOP IS DONE IN: ",time.time() - st)
     queue = [0]
     depth[0] = 0
     pointer_B = 0
@@ -157,7 +155,7 @@ def FindSuperStr (arr):
     st = time.time()
     a = list(arr)
     H = initialization (a, st)
-    sorted_list = HamiltonianSort(H)
+    sorted_list = HamiltonianSort(H, st)
     resultStr = SuperStrhelper (a, sorted_list)
     et = time.time()
     elapsed_time = et - st

@@ -83,7 +83,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     state = pointer_B #link_B.get(pointer_B) 
     list_P = sortDict (list_P) #NOTE: check if it even plays any role (probably not)
-    C = []
+    C = [] 
 
     while state != 0:
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
