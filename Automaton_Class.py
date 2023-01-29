@@ -28,9 +28,11 @@ class Aho_Corasick:
     def goto_function(self):
         new_state = 0
 
+        # l = 0
         for kmer in self.kmers:
             state = 0
 
+            # l = l + 1
         #procedure enter 
         # if it is new, than always FAIL and skip to third loop 
             j = 0
@@ -56,13 +58,12 @@ class Aho_Corasick:
         queue = []
 
         #store all "first" states into the queue 
+        l = 0
         for char in ["A", "C", "T", "G"]:
             res1 = self.goto.get((0,char), -1)
             if res1 > 0:
                 queue.append(res1)
                 self.fail[res1] = 0
-
-
         # for (from_state, char), to_state in self.goto.items():
         #     if from_state == 0 and to_state != 0:
         #         queue.append(to_state)
