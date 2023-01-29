@@ -130,10 +130,6 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     print ("Last: ", last)
     print ("Forbidden: ", forbidden)
     print ("C Is: ", C)
-    for (key,value) in first.items():
-        if key == value:
-            if key not in C:
-                C.append(key)
     return [H,C]
     
 
