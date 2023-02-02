@@ -1,5 +1,5 @@
 from Automaton_Class import *
-from HelperFunction_Automaton import *
+from Helper_Functions_AC import *
 from string_functions import *
 import time
 
