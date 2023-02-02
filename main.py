@@ -16,7 +16,7 @@ from AhoCorasick import *
 from testStr import *
 from tgreedy import *
 from Statistics import *
-#from test import *
+
 
 def call():
     def_k = 31
@@ -159,10 +159,10 @@ def call():
             output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStr)
-            output_file.close()
+            # output_file.close()
             fileMask = open(config.output + ".mask", 'w')
             fileMask.write(superStrMask)
-            fileMask.close()
+            # fileMask.close()
             mask = mask + ": " + config.output + ".mask"
         else:
             print(superStr + "\n" + superStrMask)
@@ -174,10 +174,11 @@ def call():
             output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStrMask)
-            output_file.close()
+            # output_file.close()
         else:
             print(superStrMask)
 
+    #Test
     if config.test == True:
         print ()
         print("TEST")
@@ -186,19 +187,15 @@ def call():
         else:
             testAll(superStrMask, list(arr_saved), config.k)
 
+    #Statistics 
     tm = time.time() - st
     memory = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
 
     if config.statistics != None:
         outputStats (config.statistics, config.input, output_name, mask, algorithm, config.k, len(arr_saved), len(superStr), tm, memory)
-        # statistics = str
-        # input = str 
-        # algorithm = str 
-        # config.k = int
-        # len (arr_saved) = int
-        # len (superStr) = int
-        # time = int
-    tracemalloc.stop()
+
+
 if __name__ == '__main__':
     call()
     
