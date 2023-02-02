@@ -10,9 +10,9 @@ from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
 from mask import *
-from HelperFunction_Automaton import *
+from Helper_Functions_AC import *
 from Automaton_Class import *
-from AhoCorasick import *
+from Greedy_AC import *
 from testStr import *
 from tgreedy import *
 from Statistics import *
