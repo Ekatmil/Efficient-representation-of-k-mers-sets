@@ -1,23 +1,13 @@
 import csv
 
 def outputStats (file_name, input_name, output_name, mask, algo, k, kmers_len, superStr_len, tm, memory):
-    # if output_name == False:
-    #     output_name = ""
 
-    header = ['Genome', 'Output File', 'Mask Type', 'Algorithm', 'K', 'Length of k-mers Set', 'Length of SuperString', 'Time', 'Memory Usage (current, peak)']
-    data = [input_name, output_name, mask, algo, str(k), str(kmers_len), str(superStr_len), tm, memory]
+    header = ['Genome', 'Output File', 'Mask Type', 'Algorithm', 'K', 'Length of k-mers Set', 'Length of SuperString', 'Time', 'Memory Usage Current', 'Memory Usage Peak']
+    data = [input_name, output_name, mask, algo, str(k), str(kmers_len), str(superStr_len), round(tm, 4), memory[0], memory[1]]
+
     with open(file_name, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerow(header)
         writer.writerow(data)
 
-        
-        # statistics = str
-        # input = str
-        # output = str
-        # binary mask = bool
-        # algorithm = str 
-        # config.k = int
-        # len (arr_saved) = int
-        # len (superStr) = int
-        # time = int 
+#Memory(current, peak). Current memory is the memory the code is currently using and peak memory is the maximum space the program used while executing.
