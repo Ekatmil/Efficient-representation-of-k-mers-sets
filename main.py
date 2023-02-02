@@ -3,6 +3,9 @@ from json import load
 import sys
 import argparse
 import sys
+import time
+import tracemalloc
+
 from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
@@ -10,14 +13,16 @@ from mask import *
 from HelperFunction_Automaton import *
 from Automaton_Class import *
 from AhoCorasick import *
-import time
 from testStr import *
 from tgreedy import *
+from Statistics import *
 #from test import *
 
 def call():
     def_k = 31
     st = time.time()
+    tracemalloc.start()
+
 
     parser = argparse.ArgumentParser(description="")
 
@@ -102,6 +107,14 @@ def call():
         action="store_true",
         required=False,
     )
+    parser.add_argument(
+        '-S',
+        '--stats',
+        dest='statistics',
+        help="Store stats on superstr",
+        type=str,
+        required=False,
+    )
     config = parser.parse_args(sys.argv[1:])
 
     #if no algorithm chosen
@@ -111,20 +124,25 @@ def call():
     #load fasta
     arr = load(config.k, config.input)
     arr_saved = arr.copy()
-    print ("LENGTH OF LOADED SEQ IS: ", len(arr))
+    algorithm = ""
+
 
     #algorithms
     if config.simplitig == True:
+        algorithm = "Simplitig"
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = "".join(superSet)
     if config.greedy == True:
+        algorithm = "Greedy_Approximation"
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = findSuperStr(superSet)
     if config.ahoCorasick == True:
+        algorithm = "Greedy_AC"
         superSet = FindSuperStr (arr)
         superStr = "".join(superSet)
         # superStr = FindSuperStr(arr)
     if config.tgreedy == True:
+        algorithm = "TGreedy"
         superStr = FindSuperStrTgreedy(arr)
 
 
@@ -132,9 +150,14 @@ def call():
 
     #mask and output 
 
+    mask = ""
+    output_name = ""
+
     if config.bitstring == True:
+        mask = "Binary"
         superStrMask = findMaskBinary(arr_saved, superStr, config.k)
         if (config.output != None):
+            output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStr)
             output_file.close()
@@ -145,8 +168,10 @@ def call():
             print(superStr + "\n" + superStrMask)
 
     else:
+        mask = "Case_Sensitive"
         superStrMask = findMask(arr_saved, superStr, config.k)
         if (config.output != None):
+            output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStrMask)
             output_file.close()
@@ -161,5 +186,19 @@ def call():
         else:
             testAll(superStrMask, list(arr_saved), config.k)
 
+    tm = time.time() - st
+    memory = tracemalloc.get_traced_memory()
+
+    if config.statistics != None:
+        outputStats (config.statistics, config.input, output_name, mask, algorithm, config.k, len(arr_saved), len(superStr), tm, memory)
+        # statistics = str
+        # input = str 
+        # algorithm = str 
+        # config.k = int
+        # len (arr_saved) = int
+        # len (superStr) = int
+        # time = int
+    tracemalloc.stop()
 if __name__ == '__main__':
     call()
+    
