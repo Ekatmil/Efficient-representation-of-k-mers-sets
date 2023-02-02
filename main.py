@@ -111,15 +111,16 @@ def call():
         '-S',
         '--stats',
         dest='statistics',
-        help="Store stats on superstr",
+        help="Store stats to csv file",
         type=str,
         required=False,
     )
     config = parser.parse_args(sys.argv[1:])
 
+
     #if no algorithm chosen
     if not (config.greedy or config.simplitig or config.ahoCorasick or config.tgreedy):
-        parser.error('No algorithm requested, add -g, -s, -a, or -t')
+        parser.error('No algorithm requested. Add -g, -s, -a, or -t')
 
     #load fasta
     arr = load(config.k, config.input)
@@ -146,12 +147,10 @@ def call():
         superStr = FindSuperStrTgreedy(arr)
 
 
-    print ("LENGTH OF SUPERSTR IS: ", len(superStr))
-
     #mask and output 
 
     mask = ""
-    output_name = ""
+    output_name = "Stdout"
 
     if config.bitstring == True:
         mask = "Binary"
@@ -164,6 +163,7 @@ def call():
             fileMask = open(config.output + ".mask", 'w')
             fileMask.write(superStrMask)
             fileMask.close()
+            mask = mask + ": " + config.output + ".mask"
         else:
             print(superStr + "\n" + superStrMask)
 
