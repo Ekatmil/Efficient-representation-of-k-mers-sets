@@ -1,5 +1,5 @@
 from Automaton_Class import *
-from HelperFunction_Automaton import *
+from Helper_Functions_AC import *
 from string_functions import *
 import time
 
@@ -57,6 +57,7 @@ def preprocessing(kmers, automaton, st):
                 if helper != None:
                     state_F[helper] = 0
 
+
     return (list_L, link_B, pointer_B, state_F)
 
     
@@ -83,7 +84,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     state = pointer_B #link_B.get(pointer_B) 
     list_P = sortDict (list_P) #NOTE: check if it even plays any role (probably not)
-    C = [] 
+    # C = [] 
 
     while state != 0:
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
@@ -97,68 +98,104 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
                         if first[i] == j: 
                             # print ("Cycle")
-                            C.append(j)
+                            # C.append(j)
                             list_P = removeFromDict (list_P, state, i)
                             forbidden[j] = True
                             break
-                            # if len(list_P[state]) == 1: #if P(s) has only element then goto next
+
+                            # if len(list_P[state]) <= 1: #if P(s) has only element then goto next
                             #     break
                             # else:
                             #     i = list_P[state][1] # i is the second element of P(s)
+                            #     break
+                                
 
                         H[i] = j #H <- H * {(Xi, Xj)}
                         forbidden[j] = True
 
-                    # P(s) <- P(s) - {i}
-                        helper_list = list_P[state]
-                        helper_list.remove(i)
-                        list_P[state] = helper_list
-
                         first[last[j]] = first[i] # FIRST(LAST(j)) <- FIRST(i)
                         last[first[i]] = last[j] # LAST(FIRST(i)) <- LAST(j)
-                        if list_P.get(state) == None:
-                            break
+
+                    # P(s) <- P(s) - {i}
+                        list_P = removeFromDict(list_P, state, i)
+                        # helper_list = list_P[state]
+                        # # if len(helper_list) -1 > i:
+                        # #     helper_list[i] = helper_list.pop()
+                        # # elif len(helper_list) - 1 == i:
+                        # #     helper_list.pop()
+                        # helper_list.remove(i)
+                        # list_P[state] = helper_list
+
                         #NOTE: to prevent IndexError: list index out of range
-                        if len(helper_list) == 0:
+                        if len(list_P[state]) == 0:
                             break
 
             #next
             list_P = addMultipleValues (list_P, automaton.fail[state], list_P[state]) # P(fail(s)) <- P(fail(s)) * P(s)
 
         state = link_B[state]  # s <- b(s)
-    print ("First :", first)
-    print ("Last: ", last)
-    print ("Forbidden: ", forbidden)
-    print ("C Is: ", C)
-    return [H,C]
+
+    # print (C)
+    # for i in range (len(forbidden)):
+    #     if forbidden[i] == False:
+    #         C.append(i)
+    # print (C)
+    return H
     
 
+# def initialization (a, st):
+#     A = Aho_Corasick (a)
+#     print ("Automaton is created: ", time.time() - st)
+#     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
+#     print ("PREPROCESSING IS DONE IN: ", time.time() - st)
+#     [H, C] = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
+#     print ("HAMILTONIAN IS DONE IN: ", time.time() - st)
+#     return [H,C]
+
+
+# def SuperStrhelper(a, sorted_list):
+#     for i in range (0, len(sorted_list) - 1):
+#         firstStr = sorted_list[i]
+#         secondStr = sorted_list[i+1]
+#         (prefix, over, suffix, size) = overlap(a[firstStr], a[secondStr])
+#         sStr = prefix + over + suffix
+#         a[secondStr] = sStr
+#     return a[sorted_list[len(sorted_list) -1]]
+
+# def FindSuperStrTgreedy (arr):
+#     st = time.time()
+#     a = list(arr)
+#     sorted_list = ConnectStr(initialization(a, st))
+#     resultStr = SuperStrhelper (a, sorted_list)
+#     et = time.time()
+#     elapsed_time = et - st
+#     print('Result is in :', elapsed_time, 'seconds')
+#     return resultStr
+
+
+
+#function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a, st):
+    print ("INITIALIZATION")
     A = Aho_Corasick (a)
     print ("Automaton is created: ", time.time() - st)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
     print ("PREPROCESSING IS DONE IN: ", time.time() - st)
-    [H, C] = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    print (H)
+    H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
     print ("HAMILTONIAN IS DONE IN: ", time.time() - st)
-    return [H,C]
+    return H
 
-
-def SuperStrhelper(a, sorted_list):
-    for i in range (0, len(sorted_list) - 1):
-        firstStr = sorted_list[i]
-        secondStr = sorted_list[i+1]
-        (prefix, over, suffix, size) = overlap(a[firstStr], a[secondStr])
-        sStr = prefix + over + suffix
-        a[secondStr] = sStr
-    return a[sorted_list[len(sorted_list) -1]]
-
+#function that find the set of several superstrings, which have overlap 0 between each other 
 def FindSuperStrTgreedy (arr):
     st = time.time()
-    a = list(arr)
-    sorted_list = ConnectStr(initialization(a, st))
-    resultStr = SuperStrhelper (a, sorted_list)
+
+    a = list(arr) #set to list 
+    outputSet = set() #output set 
+    H = initialization (a, st)
+    single = findSingle(H) # find all nodes of indegree = 0
+    outputSet = addtoSet (a, single, H, outputSet)
+
     et = time.time()
     elapsed_time = et - st
     print('Result is in :', elapsed_time, 'seconds')
-    return resultStr
+    return outputSet

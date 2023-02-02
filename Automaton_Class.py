@@ -27,6 +27,7 @@ class Aho_Corasick:
 
     def goto_function(self):
         new_state = 0
+        count = 0
 
         # l = 0
         for kmer in self.kmers:
@@ -48,6 +49,8 @@ class Aho_Corasick:
                 new_state += 1
                 self.goto[(state, char)] = new_state #goto (starting state, value of edge) = new state
                 state = new_state
+            count = count + 1
+        print (count)
 
 
 
@@ -56,6 +59,7 @@ class Aho_Corasick:
 
     def fail_function(self):
         queue = []
+        count = 0
 
         #store all "first" states into the queue 
         l = 0
@@ -84,3 +88,5 @@ class Aho_Corasick:
                             break
                         state = self.fail[state]
                     self.fail[res1] = res
+                    count = count + 1
+        print (count)
