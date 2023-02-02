@@ -4,7 +4,7 @@ def outputStats (file_name, input_name, output_name, mask, algo, k, kmers_len, s
     # if output_name == False:
     #     output_name = ""
 
-    header = ['Genome', 'Output File', 'Mask Type', 'Algorithm', 'K', 'Length of k-mers Set', 'Length of SuperString', 'Time', 'Memory Consumption']
+    header = ['Genome', 'Output File', 'Mask Type', 'Algorithm', 'K', 'Length of k-mers Set', 'Length of SuperString', 'Time', 'Memory Usage (current, peak)']
     data = [input_name, output_name, mask, algo, str(k), str(kmers_len), str(superStr_len), tm, memory]
     with open(file_name, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
