@@ -2,17 +2,19 @@
 
 ## MAIN
 ### [main.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/main.py)
-``Usage: main.py [-h] [-k K] [-s] [-gh] [-g] [-a] [-b] -i INPUT [-o OUTPUT]``
-	
+``Usage: main.py [-h] [-k K] [-s] [-g] [-a] [-t] [-b] -i INPUT [-o OUTPUT] [-T] [-S STATISTICS]``
+
  - -h/--help - help
  - -k K/--kmer K - is the length of each kmer. Not required. Default is k = 31.
  - -s/--simplitig - call for simplitig algorithm. Not required.
- - -gh/--hamiltonian - call for greedyHamiltonian. Not requited. NOTE: not implemented.
  - -g/--greedy - call for GreedyApproximation algorithm. Not requited.
  - -a/--aho-corasick - call for Aho_Corasick algorithm. Not required.
+ - -t/--tgreedy - call for TGreedy algorithm. Not required.
  - -b/--bitstring_mask - mask will be saved in form of 1-0. Not requitred. Default is mask with capital-small letters
  - -i INPUT/--input INPUT - input fasta file. Required
  - -o OUTPUT/--output OUTPUT - output file. Not required. If not givven, then standard output
+ - -T/--test - runs tests on superstring. Not required. Standard output
+ - -S STATISTICS, --stats STATISTICS - stores stats to given csv file STATISTICS. Not required.
 	
 #### Algotithm [main]:
 		1) Check if any algorithm is chosen, if not then Error message.

@@ -46,14 +46,9 @@ def initializeForbidden (dict, m):
 # Could be used in function Hamiltonian (Note: must be checked for correctness)
 def removeFromDict (dic, state, i):
     helper_list = dic[state]
-    # if len(helper_list) -1 > i:
-    #     helper_list[i] = helper_list.pop()
-    # elif len(helper_list) - 1 == i:
-    #     helper_list.pop()
     helper_list.remove(i)
     dic[state] = helper_list
     return dic
-
 
 
 # (VI) Function that inverts the dictionary such that value is a key and key is a value
@@ -92,6 +87,7 @@ def HamiltonianSort(H, st):
     sorted_list.append(key)
     et = time.time()
     elapsed_time = et - st
+    print (single)
     print('Hamiltonian Sort prepared for the while loop :', elapsed_time, 'seconds')
 
     while True:
@@ -112,15 +108,6 @@ def HamiltonianSort(H, st):
 
 #USED BY TGREEDY
 
-# def addToList (dic):
-#     result = []
-#     for key, value in dic.items():
-#         if key == value:
-#             result.append(key)
-#     return result
-
-
-
 #Function takes list of staring indices and path H and outputs the list of order 
 def ConnectStr (arr):
     single = findSingle(arr[0])
@@ -130,16 +117,13 @@ def ConnectStr (arr):
         if x not in C:
             C.append(x)
 
+    print (C)
     sorted_list = []
     while len(C) != 0:
         ind = C.pop()
         # print ("Index is: ", ind)
         sorted_list.append(ind)
         key = H.get(ind)
-
-        #NOTE: Not sure about below 
-        if key != None:
-            del H[ind]
         # print ("Next key from Index is: ", key)
         # print ("Sorted list: ", sorted_list)
         
@@ -152,10 +136,6 @@ def ConnectStr (arr):
             # print ("Sorted list is: ", sorted_list)
             del H[key]
             key = new_key
-    print (H)
+    print (len(H))
+    print (len(sorted_list))
     return sorted_list
-
-
-def ConnectStr_1 (H):
-    C = findSingle(H)
-    
