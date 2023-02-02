@@ -10,9 +10,9 @@ from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
 from mask import *
-from HelperFunction_Automaton import *
+from Helper_Functions_AC import *
 from Automaton_Class import *
-from AhoCorasick import *
+from Greedy_AC import *
 from testStr import *
 from tgreedy import *
 from Statistics import *
@@ -144,7 +144,8 @@ def call():
         # superStr = FindSuperStr(arr)
     if config.tgreedy == True:
         algorithm = "TGreedy"
-        superStr = FindSuperStrTgreedy(arr)
+        superSet = FindSuperStrTgreedy(arr)
+        superStr = "".join(superSet)
 
 
     #mask and output 
@@ -179,13 +180,20 @@ def call():
             print(superStrMask)
 
     #Test
+    test_res = "None"
     if config.test == True:
         print ()
         print("TEST")
         if config.bitstring == True:
-            testAll(superStr, list(arr_saved), config.k, superStrMask)
+            test = testAll(superStr, list(arr_saved), config.k, superStrMask)
+
         else:
-            testAll(superStrMask, list(arr_saved), config.k)
+            test = testAll(superStrMask, list(arr_saved), config.k)
+
+        if test:
+            test_res = "Passed"
+        else:
+            test_res = "Failed"
 
     #Statistics 
     tm = time.time() - st
@@ -193,7 +201,7 @@ def call():
     tracemalloc.stop()
 
     if config.statistics != None:
-        outputStats (config.statistics, config.input, output_name, mask, algorithm, config.k, len(arr_saved), len(superStr), tm, memory)
+        outputStats (config.statistics, config.input, output_name, mask, algorithm, config.k, len(arr_saved), len(superStr), tm, memory, str(test_res))
 
 
 if __name__ == '__main__':

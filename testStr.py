@@ -3,13 +3,17 @@ def allKMers(st, lst):
     st_helper = st.upper()
     checker = True
     notFound = []
+    Found = []
     for i in range (0, len(lst)):
         res = st_helper.find(lst[i])
         if res == -1:
             checker = False
             notFound.append(lst[i])
-        if st[res].islower():
-            print ("K-mer ", lst[i], " is found but is not in the mask")
+        elif st[res].islower():
+            if Found.find(res) == -1:
+                print ("K-mer ", lst[i], " is found but is not in the mask")
+        else:
+            Found.append(res)
     if checker:
         print ("ALL K-MERS ARE IN SUPERSTRING")
         print ("####################")
@@ -32,6 +36,7 @@ def noDifferentStr (st, lst, k):
     if checker == True:
         print ("THERE ARE NO FALSE K-MERS")
     print ("####################")
+    return checker
 
 
 def applyMask(st, bn):
@@ -48,8 +53,12 @@ def applyMask(st, bn):
 def testAll(st, lst, k, *bn):
     if bn:
         st = applyMask(st, bn[0])
-    allKMers(st, lst)
-    noDifferentStr (st, lst, k)
+    checker1 = allKMers(st, lst)
+    checker2 = noDifferentStr (st, lst, k)
+    if checker1 and checker2:
+        return True
+    else:
+        return False
 
 
 
