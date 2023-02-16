@@ -50,7 +50,6 @@ class Aho_Corasick:
                 self.goto[(state, char)] = new_state #goto (starting state, value of edge) = new state
                 state = new_state
             count = count + 1
-        print (count)
 
 
 
@@ -89,4 +88,4 @@ class Aho_Corasick:
                         state = self.fail[state]
                     self.fail[res1] = res
                     count = count + 1
-        print (count)
+

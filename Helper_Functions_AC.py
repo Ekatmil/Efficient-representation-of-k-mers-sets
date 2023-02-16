@@ -87,7 +87,6 @@ def HamiltonianSort(H, st):
     sorted_list.append(key)
     et = time.time()
     elapsed_time = et - st
-    print (single)
     print('Hamiltonian Sort prepared for the while loop :', elapsed_time, 'seconds')
 
     while True:
@@ -107,6 +106,19 @@ def HamiltonianSort(H, st):
 
 
 #USED BY TGREEDY
+
+#Function to find self overlaps
+def selfOverlap (a, first, last):    
+    arr = set()  
+    for i in range (len(first)):
+        if first[i] == last[i]:
+            arr.add(first[i])
+
+    selfOvWords = set()
+    for i in arr:
+        selfOvWords.add(a[i])
+    return selfOvWords
+
 
 #Function takes list of staring indices and path H and outputs the list of order 
 def ConnectStr (arr):
