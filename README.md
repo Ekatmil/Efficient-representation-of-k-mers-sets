@@ -136,7 +136,6 @@ Script to output the statistics for the output of main.py
 - [**def outputStats (file_name, input_name, output_name, mask, algo, k, kmers_len, superStr_len, tm, memory, test):**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/Statistics.py#L3), where
  - *file_name* is csv file where the result will be stored 
 		
- To check if all kmers are precented in the mask.
  ##### Algorithm [outputStats ]:
 		1) Create header :
 			'Genome' is name of input file 
