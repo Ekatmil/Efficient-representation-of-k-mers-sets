@@ -129,7 +129,33 @@ Script to check the correctness of the output of main.py
   **Output**:
   Messages with the information about correctness of the superstring and its mask.
 		
-
+### [Statistics.py](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/772d5909407619f60cda4c5ccce04437798a898b/main/Statistics.py)
+Script to output the statistics for the output of main.py
+***NOTE***: csv package is required.
+	
+- [**def outputStats (file_name, input_name, output_name, mask, algo, k, kmers_len, superStr_len, tm, memory, test):**](https://github.com/Ekatmil/Efficient-representation-of-k-mers-sets/blob/main/main/Statistics.py#L3), where
+ - *file_name* is csv file where the result will be stored 
+		
+ To check if all kmers are precented in the mask.
+ ##### Algorithm [outputStats ]:
+		1) Create header :
+			'Genome' is name of input file 
+			'Output File' is name of output file. If no such, then 'stdout'
+			'Mask Type' is the type of the used mask: Case_Sensitive or Binary 
+			'Algorithm' is name of used algorithm
+			'K' is the length of kmers 
+			'Length of k-mers Set' is the length of obtained set 
+			'Length of SuperString' is the length of the output string
+			'Time' is the time spent on execusion (rounded to 4 digits after the dot)
+			'Memory Usage Current' is the memory the code is currently using 
+			'Memory Usage Peak' is the memory of the maximum space the program used while executing
+			'Test Result' is result of the test Passed/Failed. If test is not provided then output is None
+		
+		2) Parse data according to the header. Data is obtained from main.py
+		3) Write header and dara to csv file file_name
+  **Output**:
+   Csv file with staticstics for the output of main.py
+		
 
 ## ALGORITHMS
 
