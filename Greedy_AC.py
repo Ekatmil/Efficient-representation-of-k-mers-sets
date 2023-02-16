@@ -7,7 +7,6 @@ import time
 #Input: set of words (kmers) and AC machine wirh goto and fail functions
 
 def preprocessing(kmers, automaton, st):
-    print ("PREPROCESSING...")
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
     state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
     inverse_E = {} #dictionary E is inverse of F
@@ -29,7 +28,6 @@ def preprocessing(kmers, automaton, st):
 
                 if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
                     state_F[i] = 0 # F(i) <- 0 
-                #print ("ONE LOOP: ", time.time() - st)
 
             j = j + 1
     queue = [0]
@@ -61,7 +59,6 @@ def preprocessing(kmers, automaton, st):
 # ALGORITHM 2: Construction of H 
 #Input: Augmented AC machine for the set of words and results of preprocessing 
 def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
-    print ("HAMILTONIAN...")
     list_P = {} # Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
     forbidden = {} # Dictionary forbidden in form a: bool where a is the index of word in the set. a = True if word is subword of other and a = False o/w
     first = {} 
@@ -126,13 +123,9 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
 #function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a, st):
-    print ("INITIALIZATION")
     A = Aho_Corasick (a)
-    print ("Automaton is created: ", time.time() - st)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
-    print ("PREPROCESSING IS DONE IN: ", time.time() - st)
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    print ("HAMILTONIAN IS DONE IN: ", time.time() - st)
     return H
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
@@ -145,31 +138,6 @@ def FindSuperStr (arr):
     single = findSingle(H) # find all nodes of indegree = 0
     outputSet = addtoSet (a, single, H, outputSet)
 
-    et = time.time()
-    elapsed_time = et - st
-    print('Result is in :', elapsed_time, 'seconds')
     return outputSet
 
 
-
-#FUNCTIONS THAT WORK WITH HAMILTONIAN SORT IN QUADRATIC TIME:
-
-# def SuperStrhelper(a, sorted_list):
-#     for i in range (0, len(sorted_list) - 1):
-#         firstStr = sorted_list[i]
-#         secondStr = sorted_list[i+1]
-#         (prefix, over, suffix, size) = overlap(a[firstStr], a[secondStr])
-#         sStr = prefix + over + suffix
-#         a[secondStr] = sStr
-#     return a[sorted_list[len(sorted_list) -1]]
-
-# def FindSuperStr (arr):
-#     st = time.time()
-#     a = list(arr)
-#     H = initialization (a, st)
-#     sorted_list = HamiltonianSort(H, st)
-#     resultStr = SuperStrhelper (a, sorted_list)
-#     et = time.time()
-#     elapsed_time = et - st
-#     print('Result is in :', elapsed_time, 'seconds')
-#     return resultStr

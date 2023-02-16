@@ -76,9 +76,9 @@ def addtoSet (a, single, H, outputSet):
                 break
     return outputSet
 
+# NOT USED (Quadratic Time)
 # (VIII) Function to sort the path H into the list
 # Used by alternative functions of AhoCorasick.py
-# Quadratic Time
 def HamiltonianSort(H, st):
     single = findSingle(H) #list of vertices of indegree 0
     sorted_list = [] #output list of the sorted path
@@ -107,7 +107,10 @@ def HamiltonianSort(H, st):
 
 #USED BY TGREEDY
 
-#Function to find self overlaps
+#(IX) Function to find self overlaps.
+# Takes set of words, first and last dictionary
+# if first[i] == last[i] then this word undex index i has overlap with itself. Closed cycle. 
+# add such word to the set and return it   
 def selfOverlap (a, first, last):    
     arr = set()  
     for i in range (len(first)):
@@ -119,35 +122,3 @@ def selfOverlap (a, first, last):
         selfOvWords.add(a[i])
     return selfOvWords
 
-
-#Function takes list of staring indices and path H and outputs the list of order 
-def ConnectStr (arr):
-    single = findSingle(arr[0])
-    H = arr[0]
-    C = arr[1]
-    for x in single:
-        if x not in C:
-            C.append(x)
-
-    print (C)
-    sorted_list = []
-    while len(C) != 0:
-        ind = C.pop()
-        # print ("Index is: ", ind)
-        sorted_list.append(ind)
-        key = H.get(ind)
-        # print ("Next key from Index is: ", key)
-        # print ("Sorted list: ", sorted_list)
-        
-        while True:
-            new_key = H.get(key)
-            # print ("New Key is: ", new_key)
-            if new_key == None:
-                break
-            sorted_list.append(key)
-            # print ("Sorted list is: ", sorted_list)
-            del H[key]
-            key = new_key
-    print (len(H))
-    print (len(sorted_list))
-    return sorted_list

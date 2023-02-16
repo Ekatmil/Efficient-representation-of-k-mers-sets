@@ -7,7 +7,6 @@ import time
 #Input: set of words (kmers) and AC machine with goto and fail functions
 
 def preprocessing(kmers, automaton, st):
-    print ("PREPROCESSING")
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
     state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
     inverse_E = {} #dictionary E is inverse of F
@@ -29,7 +28,6 @@ def preprocessing(kmers, automaton, st):
 
                 if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
                     state_F[i] = 0 # F(i) <- 0 
-                #print ("ONE LOOP: ", time.time() - st)
 
             j = j + 1
 
@@ -103,6 +101,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                             forbidden[j] = True
                             break
 
+                            # #Removed from original:
                             # if len(list_P[state]) <= 1: #if P(s) has only element then goto next
                             #     break
                             # else:
@@ -132,13 +131,9 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     
 #function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a, st):
-    print ("INITIALIZATION")
     A = Aho_Corasick (a)
-    print ("Automaton is created: ", time.time() - st)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
-    print ("PREPROCESSING IS DONE IN: ", time.time() - st)
     (H, first, last) = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    print ("HAMILTONIAN IS DONE IN: ", time.time() - st)
     return (H, first, last)
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
@@ -151,11 +146,9 @@ def FindSuperStrTgreedy (arr):
     single = findSingle(H) # find all nodes of indegree = 0
     outputSet = addtoSet (a, single, H, outputSet)
 
+    #set of all words with self overlap 
     selfOvWords = selfOverlap (a, first, last)
 
     
     outputSet.update(selfOvWords)
-    et = time.time()
-    elapsed_time = et - st
-    print('Result is in :', elapsed_time, 'seconds')
     return outputSet
