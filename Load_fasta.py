@@ -10,5 +10,4 @@ def load (k, fileName):
     for record in seqs:
         for i in range (0, len(record.seq) - k +1):
             arr.add(str((record.seq[i: i+k]))) 
-    #print ("Done with Load: ", time.time() - start_time)
     return arr

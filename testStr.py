@@ -19,7 +19,7 @@ def allKMers(st, lst):
         print ("####################")
     else:
         print ("NOT ALL K-MERS ARE IN SUPERSTRING")
-        print ("MISSING: ", *notFound, sep = "; ")
+        print ("MISSING: ", *notFound, sep = " ")
 
     return checker
 

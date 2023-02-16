@@ -6,6 +6,7 @@ import sys
 import time
 import tracemalloc
 
+
 from simplitig import *
 from Load_fasta import *
 from Greedy_Approxination import *
@@ -133,16 +134,16 @@ def call():
         algorithm = "Simplitig"
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = "".join(superSet)
-    if config.greedy == True:
+    elif config.greedy == True:
         algorithm = "Greedy_Approximation"
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = findSuperStr(superSet)
-    if config.ahoCorasick == True:
+    elif config.ahoCorasick == True:
         algorithm = "Greedy_AC"
         superSet = FindSuperStr (arr)
         superStr = "".join(superSet)
         # superStr = FindSuperStr(arr)
-    if config.tgreedy == True:
+    elif config.tgreedy == True:
         algorithm = "TGreedy"
         superSet = FindSuperStrTgreedy(arr)
         superStr = "".join(superSet)
@@ -201,7 +202,18 @@ def call():
     tracemalloc.stop()
 
     if config.statistics != None:
-        outputStats (config.statistics, config.input, output_name, mask, algorithm, config.k, len(arr_saved), len(superStr), tm, memory, str(test_res))
+        outputStats (config.statistics,
+                    config.input,
+                    output_name,
+                    mask,
+                    algorithm,
+                    config.k,
+                    len(arr_saved),
+                    len(superStr),
+                    tm,
+                    memory, 
+                    str(test_res))
+
 
 
 if __name__ == '__main__':
