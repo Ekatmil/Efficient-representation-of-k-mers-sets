@@ -2,18 +2,19 @@ def allKMers(st, lst):
     print ("--CHECKING EXISTENCE OF ALL K_MERS--")
     st_helper = st.upper()
     checker = True
-    notFound = []
-    Found = []
-    for i in range (0, len(lst)):
-        res = st_helper.find(lst[i])
+    notFound = set()
+    Found = set()
+    for i in range(len(lst)):
+        kmer = lst[i]
+        res = st_helper.find(kmer)
         if res == -1:
             checker = False
-            notFound.append(lst[i])
-        elif st[res].islower():
-            if Found.find(res) == -1:
-                print ("K-mer ", lst[i], " is found but is not in the mask")
+            notFound.add(kmer)
+        elif st[res].islower() and res not in Found:
+            print("K-mer", kmer, "is found but is not in the mask")
         else:
-            Found.append(res)
+            Found.add(res)
+
     if checker:
         print ("ALL K-MERS ARE IN SUPERSTRING")
         print ("####################")
@@ -23,15 +24,15 @@ def allKMers(st, lst):
 
     return checker
 
-def noDifferentStr (st, lst, k):
+def noDifferentStr(st, lst, k):
+    lst = set(lst)
     checker = True
-    print ("--CHECKING FOR FALSE K-MERS--")
-    for i in range (0, len(st) - k + 1):
-        if st[i].isupper():
-            word = st[i:i+k]
-            word = word.upper()
+    print("--CHECKING FOR FALSE K-MERS--")
+    for i, char in enumerate(st):
+        if i <= len(st) - k and char.isupper():
+            word = st[i:i+k].upper()
             if word not in lst:
-                print ("FALSE K-MER: ", word, " UNDER INDEX ", i)
+                print("FALSE K-MER:", word, "UNDER INDEX", i)
                 checker = False
     if checker == True:
         print ("THERE ARE NO FALSE K-MERS")
