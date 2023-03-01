@@ -1,12 +1,11 @@
 from Automaton_Class import *
 from Helper_Functions_AC import *
 from string_functions import *
-import time
 
 # ALGORITHM 1: PREPROCESSING
 #Input: set of words (kmers) and AC machine with goto and fail functions
 
-def preprocessing(kmers, automaton, st):
+def preprocessing(kmers, automaton):
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
     state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
     inverse_E = {} #dictionary E is inverse of F
@@ -82,8 +81,6 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     state = pointer_B #link_B.get(pointer_B) 
     list_P = sortDict (list_P) #NOTE: check if it even plays any role (probably not)
-    # C = [] 
-
     while state != 0:
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
 
@@ -95,20 +92,11 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
                         i = list_P[state][0] #i is the first element of P(s)
 
                         if first[i] == j: 
-                            # print ("Cycle")
-                            # C.append(j)
                             list_P = removeFromDict (list_P, state, i)
                             forbidden[j] = True
                             break
 
-                            # #Removed from original:
-                            # if len(list_P[state]) <= 1: #if P(s) has only element then goto next
-                            #     break
-                            # else:
-                            #     i = list_P[state][1] # i is the second element of P(s)
-                            #     break
                                 
-
                         H[i] = j #H <- H * {(Xi, Xj)}
                         forbidden[j] = True
 
@@ -127,28 +115,21 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
         state = link_B[state]  # s <- b(s)
 
-    return (H, first, last)
+    return (H)
     
 #function that creates automaton and runs two algorithms from above. Outputs path H
-def initialization (a, st):
+def initialization (a):
     A = Aho_Corasick (a)
-    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
-    (H, first, last) = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    return (H, first, last)
+    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
+    H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
+    return H
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
 def FindSuperStrTgreedy (arr):
-    st = time.time()
-
     a = list(arr) #set to list 
     outputSet = set() #output set 
-    (H, first, last) = initialization (a, st)
-    single = findSingle(H) # find all nodes of indegree = 0
+    H = initialization (a)
+    single = findSingle(H, len(arr)) # find all nodes of indegree = 0
     outputSet = addtoSet (a, single, H, outputSet)
 
-    #set of all words with self overlap 
-    selfOvWords = selfOverlap (a, first, last)
-
-    
-    outputSet.update(selfOvWords)
     return outputSet
