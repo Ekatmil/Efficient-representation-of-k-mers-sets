@@ -1,64 +1,10 @@
 from Automaton_Class import *
+from Greedy_AC import initialization
 from Helper_Functions_AC import *
 from string_functions import *
 
-# ALGORITHM 1: PREPROCESSING
-#Input: set of words (kmers) and AC machine with goto and fail functions
 
-def preprocessing(kmers, automaton):
-    list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
-    state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
-    inverse_E = {} #dictionary E is inverse of F
-    depth = {} # dictionary Depth in form a:b where a is state and b is its depth 
-    link_B = {} #linked list 
-
-    for i in range (0, len(kmers)): 
-        state = 0 # s <- 0
-        j = 0
-        for char in kmers[i]:
-
-            state = automaton.goto.get((state, char), state and -1) # s <- goto(s, Aj), where Aj is char 
-
-            list_L = addMultipleValues (list_L, state, i) # L(s) <- L(s) * {j}
-
-            if j == len(kmers[i]) - 1: 
-                state_F [i] = state # F(i) <- s
-                inverse_E[state] = i # E(s) <- i 
-
-                if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
-                    state_F[i] = 0 # F(i) <- 0 
-
-            j = j + 1
-
-    queue = [0]
-    depth[0] = 0
-    pointer_B = 0
-
-    while queue:
-        queue_state = queue.pop(0) #let r be the next state in queue; queue <- queue - r
-
-        for char in ["A", "C", "T", "G"]:
-            res = automaton.goto.get((queue_state, char), -1)
-            if res!= -1:
-                queue.append(res)
-                if depth.get(queue_state) != None:
-                    depth[res] = int(depth.get(queue_state)) + 1 # d(s) <- d(r) + 1
-                else:
-                    depth[res] = 1
-
-
-                link_B[res] = pointer_B #b(s) <- B
-                pointer_B = res # B <- s
-                
-                helper = inverse_E.get(automaton.fail[res]) # F(E(fail(s))) <- 0
-                if helper != None:
-                    state_F[helper] = 0
-
-
-    return (list_L, link_B, pointer_B, state_F)
-
-    
-# ALGORITHM 2: Construction of H 
+# ALGORITHM: Construction of H 
 #Input: Augmented AC machine for the set of words and results of preprocessing 
 def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
     list_P = {} # Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
@@ -117,13 +63,7 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     return (H)
     
-#function that creates automaton and runs two algorithms from above. Outputs path H
-def initialization (a):
-    A = Aho_Corasick (a)
-    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-    H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    return H
-
+    
 #function that find the set of several superstrings, which have overlap 0 between each other 
 def FindSuperStrTgreedy (arr):
     a = list(arr) #set to list 
