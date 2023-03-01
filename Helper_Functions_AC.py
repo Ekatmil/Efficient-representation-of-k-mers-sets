@@ -17,12 +17,14 @@ def addMultipleValues (dict, key, value):
 
 # (II) Function that finds the vertices of indegree 0 
 # Used in function FindSuperSet
+# n is the length of the kmers set 
 
-def findSingle (H):
-    keys = list(H.keys())
+def findSingle (H, n):
+    keys = list(range(1, n)) 
     values = set(H.values())
     output = [x for x in keys if x not in values]
     return output 
+
 
 # (III) Function to sort dictionary by key in reverse order 
 # Used in function Hamiltonian (Note: probably useless)
@@ -64,6 +66,7 @@ def InverseDictionary (dic):
 def addtoSet (a, single, H, outputSet):
     for x in single:
         key = x 
+        sStr = a[x]
         while True:
             if H.get(key) != None:
                 value = H[key]
@@ -74,6 +77,7 @@ def addtoSet (a, single, H, outputSet):
             else:
                 outputSet.add(sStr)
                 break
+    # print (outputSet)
     return outputSet
 
 # NOT USED (Quadratic Time)

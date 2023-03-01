@@ -15,6 +15,11 @@ def allKMers(st, lst):
         else:
             Found.add(res)
 
+    notFound = notFound - Found
+    if notFound == False:
+        checker == True
+
+    #print checker result
     if checker:
         print ("ALL K-MERS ARE IN SUPERSTRING")
         print ("####################")

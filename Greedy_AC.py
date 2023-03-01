@@ -1,12 +1,11 @@
 from Automaton_Class import *
 from Helper_Functions_AC import *
 from string_functions import *
-import time
 
 # ALGORITHM 1: PREPROCESSING
 #Input: set of words (kmers) and AC machine wirh goto and fail functions
 
-def preprocessing(kmers, automaton, st):
+def preprocessing(kmers, automaton):
     list_L = {}  #dictionary L in form a:[b], where a is state and b index of word that "has to go throw this state"
     state_F = {} #dictionary F in form a:b, where a is index of word in the set of words and b is finite state for this word
     inverse_E = {} #dictionary E is inverse of F
@@ -122,20 +121,19 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
 
 #function that creates automaton and runs two algorithms from above. Outputs path H
-def initialization (a, st):
+def initialization (a):
     A = Aho_Corasick (a)
-    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A, st)
+    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
     H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
     return H
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
 def FindSuperStr (arr):
-    st = time.time()
 
     a = list(arr) #set to list 
     outputSet = set() #output set 
-    H = initialization (a, st)
-    single = findSingle(H) # find all nodes of indegree = 0
+    H = initialization (a)
+    single = findSingle(H, len(a)) # find all nodes of indegree = 0
     outputSet = addtoSet (a, single, H, outputSet)
 
     return outputSet

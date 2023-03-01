@@ -8,18 +8,9 @@ class Aho_Corasick:
         self.goto_function()
         self.fail_function()
 
-    def isLeaf (self, state):
-        for char in ["A", "C", "T", "G"]:
-            res1 = self.goto.get((state, char), -1)
-            if res1 != -1:
-                return False
-        return True
 
-
-        # for (from_state, char), to_state in self.goto.items():
-        #     if state == from_state:
-        #         return False
-        # return True
+    def isLeaf(self, state):
+        return any((state, char) in self.goto for char in ["A", "C", "T", "G"]) == False
 
 
     #CONSTRUCTION OF GOTO FUNCTION (Algo 2)
@@ -29,11 +20,8 @@ class Aho_Corasick:
         new_state = 0
         count = 0
 
-        # l = 0
         for kmer in self.kmers:
             state = 0
-
-            # l = l + 1
         #procedure enter 
         # if it is new, than always FAIL and skip to third loop 
             j = 0
@@ -67,10 +55,6 @@ class Aho_Corasick:
             if res1 > 0:
                 queue.append(res1)
                 self.fail[res1] = 0
-        # for (from_state, char), to_state in self.goto.items():
-        #     if from_state == 0 and to_state != 0:
-        #         queue.append(to_state)
-        #         self.fail[to_state] = 0
 
         #construction of "inside" fails
         while queue:
@@ -88,4 +72,3 @@ class Aho_Corasick:
                         state = self.fail[state]
                     self.fail[res1] = res
                     count = count + 1
-
