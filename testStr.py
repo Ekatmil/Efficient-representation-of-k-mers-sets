@@ -1,30 +1,32 @@
 def allKMers(st, lst):
     print ("--CHECKING EXISTENCE OF ALL K_MERS--")
-    st_helper = st.upper()
-    checker = True
-    notFound = set()
-    Found = set()
-    for i in range(len(lst)):
-        kmer = lst[i]
-        res = st_helper.find(kmer)
-        if res == -1:
-            checker = False
-            notFound.add(kmer)
-        elif st[res].islower() and res not in Found:
-            print("K-mer", kmer, "is found but is not in the mask")
-        else:
-            Found.add(res)
+    #initializing 
+    st = st.upper()
+    lst_dict = {}
+    k = len(lst[0])
+    #store all kmers to the dictionary in form kmer:false 
+    for kmer in lst:
+        lst_dict[kmer] = False
 
-    notFound = notFound - Found
-    if notFound == False:
-        checker == True
-
-    #print checker result
+    #check if part of string is in the dictionary 
+    for i in range(len(st) - k + 1):
+        kmer = st[i:i+k]
+        if lst_dict.get(kmer) != None:
+            lst_dict[kmer] = True 
+    
+    #check if all the keys in dictionary have value of True
+    checker = all(val == True for val in lst_dict.values())
+    
+    #print result 
     if checker:
         print ("ALL K-MERS ARE IN SUPERSTRING")
         print ("####################")
     else:
         print ("NOT ALL K-MERS ARE IN SUPERSTRING")
+        notFound = set()
+        for key, value in lst_dict.items():
+            if value == False:
+                notFound.add(key)
         print ("MISSING: ", *notFound, sep = " ")
 
     return checker
