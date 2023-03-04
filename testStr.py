@@ -29,7 +29,6 @@ def allKMers(st, lst):
                 notFound.add(key)
         print ("MISSING: ", *notFound, sep = " ")
 
-    return checker
 
 def noDifferentStr(st, lst, k):
     lst = set(lst)
@@ -44,7 +43,6 @@ def noDifferentStr(st, lst, k):
     if checker == True:
         print ("THERE ARE NO FALSE K-MERS")
     print ("####################")
-    return checker
 
 
 def applyMask(st, bn):
@@ -61,12 +59,8 @@ def applyMask(st, bn):
 def testAll(st, lst, k, *bn):
     if bn:
         st = applyMask(st, bn[0])
-    checker1 = allKMers(st, lst)
-    checker2 = noDifferentStr (st, lst, k)
-    if checker1 and checker2:
-        return True
-    else:
-        return False
+    allKMers(st, lst)
+    noDifferentStr (st, lst, k)
 
 
 

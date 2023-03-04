@@ -6,23 +6,24 @@ import sys
 import time
 import tracemalloc
 
+from Load_fasta import *
+from mask import *
 
 from simplitig import *
-from Load_fasta import *
 from Greedy_Approxination import *
-from mask import *
-from Helper_Functions_AC import *
-from Automaton_Class import *
 from Greedy_AC import *
-from testStr import *
 from tgreedy import *
+
+from testStr import *
 from Statistics import *
 
 
 def call():
-    def_k = 31
-    st = time.time()
     tracemalloc.start()
+    def_k = 31
+    st1 = time.time()
+    st = time.process_time()
+
 
 
     parser = argparse.ArgumentParser(description="")
@@ -136,13 +137,13 @@ def call():
         superStr = "".join(superSet)
     elif config.greedy == True:
         algorithm = "Greedy_Approximation"
-        superSet = compute_simplitig(arr, config.k)  #set
-        superStr = findSuperStr(superSet)
+        superStr = shortest_superstring (list(arr))
+        # superSet = compute_simplitig(arr, config.k)  #set
+        # superStr = findSuperStr(superSet)
     elif config.ahoCorasick == True:
         algorithm = "Greedy_AC"
         superSet = FindSuperStr (arr)
         superStr = "".join(superSet)
-        # superStr = FindSuperStr(arr)
     elif config.tgreedy == True:
         algorithm = "TGreedy"
         superSet = FindSuperStrTgreedy(arr)
@@ -181,23 +182,19 @@ def call():
             print(superStrMask)
 
     #Test
-    test_res = "None"
     if config.test == True:
         print ()
         print("TEST")
         if config.bitstring == True:
-            test = testAll(superStr, list(arr_saved), config.k, superStrMask)
+            testAll(superStr, list(arr_saved), config.k, superStrMask)
 
         else:
-            test = testAll(superStrMask, list(arr_saved), config.k)
+            testAll(superStrMask, list(arr_saved), config.k)
 
-        if test:
-            test_res = "Passed"
-        else:
-            test_res = "Failed"
 
     #Statistics 
-    tm = time.time() - st
+    tm1 = time.time() - st1
+    tm = time.process_time() - st
     memory = tracemalloc.get_traced_memory()
     tracemalloc.stop()
 
@@ -211,8 +208,8 @@ def call():
                     len(arr_saved),
                     len(superStr),
                     tm,
-                    memory, 
-                    str(test_res))
+                    tm1, 
+                    memory)
 
 
 
