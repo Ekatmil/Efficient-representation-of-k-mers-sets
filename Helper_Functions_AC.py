@@ -1,4 +1,3 @@
-import time
 from string_functions import *
 
 
@@ -15,8 +14,8 @@ def addMultipleValues (dict, key, value):
         dict[key].append(value)
     return dict
 
-# (II) Function that finds the vertices of indegree 0 
-# Used in function FindSuperSet
+# (II) Function that finds the words, which are not the H. (indegree 0 and with self overlaps)
+# Used in function FindSuperSet and FindSuperSetTgreedy
 # n is the length of the kmers set 
 
 def findSingle (H, n):
@@ -26,103 +25,39 @@ def findSingle (H, n):
     return output 
 
 
-# (III) Function to sort dictionary by key in reverse order 
-# Used in function Hamiltonian (Note: probably useless)
-
-def sortDict (dict):
-    dict1 = {}
-    keylist = list(dict.keys())
-    keylist.sort()
-    for key in keylist[::-1]: #reverse
-        dict1[key] = dict[key]
-    return (dict1)
-
-#(IV) Function that stores False for every key in "forbidden" dictionary 
-# Used in function Hamiltonian 
-def initializeForbidden (dict, m):
-    for j in range (0, m):
+#(III) Function that stores False for every key in "forbidden" dictionary 
+# Used in function Hamiltonian
+#  
+def initializeForbidden (dict, n):
+    for j in range (0, n):
         dict[j] = False
-    return dict 
+    return dict
 
-#(V) Function that removes from dictionary with multiple values for one key 
-# Could be used in function Hamiltonian (Note: must be checked for correctness)
-def removeFromDict (dic, state, i):
-    helper_list = dic[state]
+#(IV) Function that removes from dictionary with multiple values for one key 
+# Could be used in function Hamiltonian
+
+def removeFromDict (dict, state, i):
+    helper_list = dict[state]
     helper_list.remove(i)
-    dic[state] = helper_list
-    return dic
+    dict[state] = helper_list
+    return dict
 
 
-# (VI) Function that inverts the dictionary such that value is a key and key is a value
-# Not used
-def InverseDictionary (dic):
-    inverse_dic = {}
-    for key, value in dic.items():
-        inverse_dic[value] = key 
-    return inverse_dic
+# (V) Function that adds merged strings into the set 
+# Used by function FindSuperSet and FindSuperSetTgreedy
 
-# (VII) Function that adds merged strings into the set 
-# Used by function FindSuperSet and is key function
-def addtoSet (a, single, H, outputSet):
-    for x in single:
+def addtoSet (kmer_lst, single_lst, H, outputSet):
+    for x in single_lst:
         key = x 
-        sStr = a[x]
+        sStr = kmer_lst[x]
         while True:
             if H.get(key) != None:
                 value = H[key]
-                (prefix, over, suffix, size) = overlap(a[key], a[value])
+                (prefix, over, suffix, size) = overlap(kmer_lst[key], kmer_lst[value])
                 sStr = prefix + over + suffix
-                a[value] = sStr
+                kmer_lst[value] = sStr
                 key = value
             else:
                 outputSet.add(sStr)
                 break
-    # print (outputSet)
     return outputSet
-
-# NOT USED (Quadratic Time)
-# (VIII) Function to sort the path H into the list
-# Used by alternative functions of AhoCorasick.py
-def HamiltonianSort(H, st):
-    single = findSingle(H) #list of vertices of indegree 0
-    sorted_list = [] #output list of the sorted path
-    i = len(single) - 2
-    key = single.pop()#the element from the single is taken and removed
-    sorted_list.append(key)
-    et = time.time()
-    elapsed_time = et - st
-    print('Hamiltonian Sort prepared for the while loop :', elapsed_time, 'seconds')
-
-    while True:
-        if H.get(key) != None:
-            value = H[key]
-            sorted_list.append(value)
-            key = value
-        else:
-            if i >= 0:
-                key = single[i]
-                i = i-1
-                sorted_list.append(key)
-            else:
-                break
-    return (sorted_list)
-
-
-
-#USED BY TGREEDY
-
-#(IX) Function to find self overlaps.
-# Takes set of words, first and last dictionary
-# if first[i] == last[i] then this word undex index i has overlap with itself. Closed cycle. 
-# add such word to the set and return it   
-def selfOverlap (a, first, last):    
-    arr = set()  
-    for i in range (len(first)):
-        if first[i] == last[i]:
-            arr.add(first[i])
-
-    selfOvWords = set()
-    for i in arr:
-        selfOvWords.add(a[i])
-    return selfOvWords
-

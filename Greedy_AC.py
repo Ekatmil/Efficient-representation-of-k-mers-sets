@@ -57,16 +57,16 @@ def preprocessing(kmers, automaton):
 
 # ALGORITHM 2: Construction of H 
 #Input: Augmented AC machine for the set of words and results of preprocessing 
-def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
+def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, n):
     list_P = {} # Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
     forbidden = {} # Dictionary forbidden in form a: bool where a is the index of word in the set. a = True if word is subword of other and a = False o/w
     first = {} 
     last = {}
     H = {}
 
-    forbidden = initializeForbidden(forbidden,m) #initializing all values to False for each word 
+    forbidden = initializeForbidden(forbidden,n) #initializing all values to False for each word 
 
-    for j in range (0, m): #this lopp initializes new dictionaries. List P is list P(s) = [a], where s is fail state for j in F(a) = j 
+    for j in range (0, n): #this lopp initializes new dictionaries. List P is list P(s) = [a], where s is fail state for j in F(a) = j 
         helper_1 = state_F.get(j) #F(j)
         if helper_1 != 0: #F(j) != O
             helper = automaton.fail[helper_1] #f(F(j))
@@ -77,7 +77,6 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
 
     state = pointer_B #link_B.get(pointer_B) 
-    list_P = sortDict (list_P) #NOTE: check if it even plays any role (probably not)
 
 
     while state != 0:
@@ -124,17 +123,16 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 def initialization (a):
     A = Aho_Corasick (a)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-    H = Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
-    return H
+    return Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
-def FindSuperStr (arr):
+def FindSuperStr (kmers_set):
 
-    a = list(arr) #set to list 
+    lst = list(kmers_set) #set to list 
     outputSet = set() #output set 
-    H = initialization (a)
-    single = findSingle(H, len(a)) # find all nodes of indegree = 0
-    outputSet = addtoSet (a, single, H, outputSet)
+    H = initialization (lst)
+    single_lst = findSingle(H, len(lst)) # find all nodes of indegree = 0
+    outputSet = addtoSet (lst, single_lst, H, outputSet)
 
     return outputSet
 

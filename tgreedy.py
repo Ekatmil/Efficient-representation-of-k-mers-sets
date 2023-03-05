@@ -1,12 +1,12 @@
 from Automaton_Class import *
-from Greedy_AC import initialization
+from Greedy_AC import preprocessing
 from Helper_Functions_AC import *
 from string_functions import *
 
 
 # ALGORITHM: Construction of H 
 #Input: Augmented AC machine for the set of words and results of preprocessing 
-def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
+def HamiltonianT (list_L, link_B, pointer_B, state_F, automaton, m):
     list_P = {} # Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
     forbidden = {} # Dictionary forbidden in form a: bool where a is the index of word in the set. a = True if word is subword of other and a = False o/w
     first = {} 
@@ -26,7 +26,6 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
 
     state = pointer_B #link_B.get(pointer_B) 
-    list_P = sortDict (list_P) #NOTE: check if it even plays any role (probably not)
     while state != 0:
         if list_P.get(state) != None and len(list_P.get(state)) > 0: #if P(s) is not empty 
 
@@ -63,7 +62,14 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, m):
 
     return (H)
     
-    
+
+#function that creates automaton and runs two algorithms from above. Outputs path H
+def initialization (a):
+    A = Aho_Corasick (a)
+    (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
+    H = HamiltonianT (list_L, link_B, pointer_B, state_F, A, len(a))
+    return H
+  
 #function that find the set of several superstrings, which have overlap 0 between each other 
 def FindSuperStrTgreedy (arr):
     a = list(arr) #set to list 

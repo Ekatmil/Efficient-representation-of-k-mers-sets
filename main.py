@@ -122,7 +122,9 @@ def call():
 
     #if no algorithm chosen
     if not (config.greedy or config.simplitig or config.ahoCorasick or config.tgreedy):
-        parser.error('No algorithm requested. Add -g, -s, -a, or -t')
+        print('Select one of the options for the algorithm.\n')
+        parser.print_help()
+        parser.exit(0)
 
     #load fasta
     arr = load(config.k, config.input)
