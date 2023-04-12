@@ -11,13 +11,20 @@ def preprocessing(kmers, automaton):
     inverse_E = {} #dictionary E is inverse of F
     depth = {} # dictionary Depth in form a:b where a is state and b is its depth 
     link_B = {} #linked list 
+    alphabet = ['A', 'C', 'T', 'G']
+    n = len(automaton.goto)
 
     for i in range (0, len(kmers)): 
         state = 0 # s <- 0
         j = 0
-        for char in kmers[i]:
-
-            state = automaton.goto.get((state, char), state and -1) # s <- goto(s, Aj), where Aj is char 
+        for char_helper in kmers[i]:
+            char = alphabet.index(char_helper)
+        
+            if state == n or state == '':
+                break
+    
+            state = automaton.goto[state][char]
+            # state = automaton.goto.get((state, char), state and -1) # s <- goto(s, Aj), where Aj is char 
 
             list_L = addMultipleValues (list_L, state, i) # L(s) <- L(s) * {j}
 
@@ -25,7 +32,7 @@ def preprocessing(kmers, automaton):
                 state_F [i] = state # F(i) <- s
                 inverse_E[state] = i # E(s) <- i 
 
-                if automaton.isLeaf(state) == False: #state is not leaf or state != -1 
+                if state != n and state != '' and automaton.isLeaf(state) == False: #state is not leaf or state != -1 
                     state_F[i] = 0 # F(i) <- 0 
 
             j = j + 1
@@ -36,9 +43,11 @@ def preprocessing(kmers, automaton):
     while queue:
         queue_state = queue.pop(0) #let r be the next state in queue; queue <- queue - r
 
-        for char in ["A", "C", "T", "G"]:
-            res = automaton.goto.get((queue_state, char), -1)
-            if res!= -1:
+        for char, extra in enumerate (alphabet):
+            if queue_state == n:
+                continue
+            res = automaton.goto[queue_state][char]
+            if res!= '':
                 queue.append(res)
                 if depth.get(queue_state) != None:
                     depth[res] = int(depth.get(queue_state)) + 1 # d(s) <- d(r) + 1
@@ -58,17 +67,18 @@ def preprocessing(kmers, automaton):
 # ALGORITHM 2: Construction of H 
 #Input: Augmented AC machine for the set of words and results of preprocessing 
 def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, n):
-    list_P = {} # Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
-    forbidden = {} # Dictionary forbidden in form a: bool where a is the index of word in the set. a = True if word is subword of other and a = False o/w
-    first = {} 
-    last = {}
+    list_P = {} # (state, failed word index) Dictionary P in form a: [b], where b is index of word in the set of words and a is state where "this word fails" 
+    forbidden = {} # (word index, boolean) Dictionary forbidden in form a: bool where a is the index of word in the set. a = True if word is subword of other and a = False o/w
+    first = {} # (prefix, state)
+    last = {} #(suffix, state)
     H = {}
 
     forbidden = initializeForbidden(forbidden,n) #initializing all values to False for each word 
 
     for j in range (0, n): #this lopp initializes new dictionaries. List P is list P(s) = [a], where s is fail state for j in F(a) = j 
         helper_1 = state_F.get(j) #F(j)
-        if helper_1 != 0: #F(j) != O
+        if helper_1 != 0 and helper_1 != '' and helper_1 != None : #F(j) != O
+  
             helper = automaton.fail[helper_1] #f(F(j))
             list_P = addMultipleValues(list_P, helper, j) #P(fail(F(j))) * {j}
             first[j] = last[j] = j # FIRST(j) <- LAST(j) <- j 
@@ -123,6 +133,8 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, n):
 def initialization (a):
     A = Aho_Corasick (a)
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
+
+
     return Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
 
 #function that find the set of several superstrings, which have overlap 0 between each other 
