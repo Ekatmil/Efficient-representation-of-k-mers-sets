@@ -14,8 +14,6 @@ class Aho_Corasick:
                 return False
         return True
 
-    # def isLeaf(self, state):
-    #     return any((state, char) in self.goto for char in ["A", "C", "T", "G"]) == False
 
 
     #CONSTRUCTION OF GOTO FUNCTION (Algo 2)
@@ -24,7 +22,9 @@ class Aho_Corasick:
 
     def goto_function (self):
         
-        num_states = int(math.pow (len(self.kmers[0]), len(self.kmers))) #mistake. Can not work with larger numbers
+        num_states = int(math.pow (4, len(self.kmers[0])))
+        
+#         num_states = int(math.pow (len(self.kmers[0]), len(self.kmers))) #mistake. Can not work with larger numbers
         self.goto = [[-1] * 4 for _ in range(num_states)]
         new_state = 0
         
