@@ -22,31 +22,38 @@ class Aho_Corasick:
 
     def goto_function (self):
         
-        num_states = int(math.pow (4, len(self.kmers[0])))
+#         num_states = int(math.pow (4, len(self.kmers[0])))
         
-#         num_states = int(math.pow (len(self.kmers[0]), len(self.kmers))) #mistake. Can not work with larger numbers
-        self.goto = [[-1] * 4 for _ in range(num_states)]
+# #         num_states = int(math.pow (len(self.kmers[0]), len(self.kmers))) #mistake. Can not work with larger numbers
+#         self.goto = [[-1] * 4 for _ in range(num_states)]
         new_state = 0
+        self.goto.append([-1]*4)
         
         for kmer in self.kmers:
             state = 0
             j = 0
             for char in kmer:
                 i = ['A', 'C', 'T', 'G'].index(char)
+                if self.goto[state][i] == -1:
+                    new_state +=1
+                    self.goto.append([-1]*4)
+                    self.goto[state][i] = new_state
+                    state = new_state
+                else:
+                    state = self.goto[state][i]
                 res = self.goto[state][i]
-                if res == -1:
-                    break
-                state = res
+    
                 j += 1
+        
             for char in kmer[j:]:
                 i = ['A', 'C', 'T', 'G'].index(char)
                 new_state += 1
+                self.goto.append([-1]*4)
                 self.goto[state][i] = new_state
-                check_last = (state, i, new_state)
+                self.goto[state][i] = new_state
                 state = new_state
-                split_point = new_state
 
-        self.goto = self.goto[:split_point] #to cut the list when required
+#         self.goto = self.goto[:split_point] #to cut the list when required
 
 
     #CONSTRUCTION OF FAIL FUNCTION (Algo 3)
