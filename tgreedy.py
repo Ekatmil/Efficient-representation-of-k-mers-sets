@@ -49,10 +49,12 @@ def HamiltonianT (list_L, link_B, pointer_B, state_F, automaton, m):
                         last[first[i]] = last[j] # LAST(FIRST(i)) <- LAST(j)
 
                     # P(s) <- P(s) - {i}
-                        list_P = removeFromDict(list_P, state, i)
+                        helper_list = list_P[state]
+                        helper_list.remove(i)
+                        list_P[state] = helper_list
 
                         #NOTE: to prevent IndexError: list index out of range
-                        if len(list_P[state]) == 0:
+                        if len(helper_list) == 0:
                             break
 
             #next
@@ -66,7 +68,9 @@ def HamiltonianT (list_L, link_B, pointer_B, state_F, automaton, m):
 #function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a):
     A = Aho_Corasick (a)
+    print ("here1")
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
+    print("here2")
     H = HamiltonianT (list_L, link_B, pointer_B, state_F, A, len(a))
     return H
   
@@ -75,7 +79,10 @@ def FindSuperStrTgreedy (arr):
     a = list(arr) #set to list 
     outputSet = set() #output set 
     H = initialization (a)
+    print ("here3")
     single = findSingle(H, len(arr)) # find all nodes of indegree = 0
+    print ("here4")
     outputSet = addtoSet (a, single, H, outputSet)
+    print ("here5")
 
     return outputSet
