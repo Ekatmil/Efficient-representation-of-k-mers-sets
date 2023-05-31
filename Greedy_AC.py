@@ -16,11 +16,10 @@ def preprocessing(kmers, automaton):
         state = 0 # s <- 0
         j = 0
         for char in kmers[i]:
-
-            state = automaton.goto.get((state, char), state and -1) # s <- goto(s, Aj), where Aj is char 
+            state = automaton.goto.get((state, char), -1) # s <- goto(s, Aj), where Aj is char 
 
             list_L = addMultipleValues (list_L, state, i) # L(s) <- L(s) * {j}
-
+            # print ("LIST L FOR ", state, "add", i, "and get list ", list_L[state])
             if j == len(kmers[i]) - 1: 
                 state_F [i] = state # F(i) <- s
                 inverse_E[state] = i # E(s) <- i 
@@ -122,6 +121,10 @@ def Hamiltonian (list_L, link_B, pointer_B, state_F, automaton, n):
 #function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a):
     A = Aho_Corasick (a)
+
+    # for (i,j), l in A.goto.items():
+    #     print (i, j, l)
+        
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
     return Hamiltonian (list_L, link_B, pointer_B, state_F, A, len(a))
 
@@ -135,5 +138,4 @@ def FindSuperStr (kmers_set):
     outputSet = addtoSet (lst, single_lst, H, outputSet)
 
     return outputSet
-
 

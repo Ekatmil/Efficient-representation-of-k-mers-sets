@@ -1,5 +1,5 @@
 from Automaton_Class import *
-from Greedy_AC import preprocessing
+from Greedy_AC import *
 from Helper_Functions_AC import *
 from string_functions import *
 
@@ -68,9 +68,7 @@ def HamiltonianT (list_L, link_B, pointer_B, state_F, automaton, m):
 #function that creates automaton and runs two algorithms from above. Outputs path H
 def initialization (a):
     A = Aho_Corasick (a)
-    print ("here1")
     (list_L, link_B, pointer_B, state_F) = preprocessing (a, A)
-    print("here2")
     H = HamiltonianT (list_L, link_B, pointer_B, state_F, A, len(a))
     return H
   
@@ -79,10 +77,7 @@ def FindSuperStrTgreedy (arr):
     a = list(arr) #set to list 
     outputSet = set() #output set 
     H = initialization (a)
-    print ("here3")
     single = findSingle(H, len(arr)) # find all nodes of indegree = 0
-    print ("here4")
     outputSet = addtoSet (a, single, H, outputSet)
-    print ("here5")
-
-    return outputSet
+    outputSet_final = FindSuperStr(outputSet)
+    return outputSet_final
