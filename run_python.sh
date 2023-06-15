@@ -28,7 +28,7 @@ do
             echo "Invalid algorithm: $y"
             exit 1
         fi
-        z="k${x}_${input_file}_${algorithm}"
+        z="${input_file}_k${x}_${algorithm}"
         outfile="./outputs/out_$z"
         statsfile="./stats/stats_$z"
         command="python3 main.py -k $x -${y} -i test_fasta.fa -o $outfile -S $statsfile" 
