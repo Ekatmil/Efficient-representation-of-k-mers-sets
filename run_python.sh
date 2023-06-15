@@ -11,6 +11,8 @@ start_x=$1
 end_x=$2
 input_file=$3
 
+mkdir -p outputs
+mkdir -p stats
 
 for ((x=start_x; x<=end_x; x++))
 do
@@ -27,8 +29,8 @@ do
             exit 1
         fi
         z="k${x}_${input_file}_${algorithm}"
-        outfile="./out_$z"
-        statsfile="./stats_$z"
+        outfile="./outputs/out_$z"
+        statsfile="./stats/stats_$z"
         command="python3 main.py -k $x -${y} -i test_fasta.fa -o $outfile -S $statsfile" 
         echo "Command #$z: $command"
         $command &
