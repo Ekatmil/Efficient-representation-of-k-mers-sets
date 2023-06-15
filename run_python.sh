@@ -2,31 +2,36 @@
 
 
 
-if (( $# != 2 )); then
-    echo "Enter the range of k"
+if (( $# != 3 )); then
+    echo "Enter the range of k (start and end) and input file"
     exit 1
 fi
 
 start_x=$1
 end_x=$2
+input_file=$3
 
-z=1
 
 for ((x=start_x; x<=end_x; x++))
 do
     for y in a t s
     do
-        outfile="out_$z"
-        statsfile="stats_$z"
-        command="python3 main.py -k $x -${y} -i test_fasta.fa -o $outfile -S $statsfile"
+        if [[ $y == "s" ]]; then
+            algorithm="simplitig"
+        elif [[ $y == "a" ]]; then
+            algorithm="Greedy_AC"
+        elif [[ $y == "t" ]]; then
+            algorithm="Tgreedy"
+        else
+            echo "Invalid algorithm: $y"
+            exit 1
+        fi
+        z="k${x}_${input_file}_${algorithm}"
+        outfile="./out_$z"
+        statsfile="./stats_$z"
+        command="python3 main.py -k $x -${y} -i test_fasta.fa -o $outfile -S $statsfile" 
         echo "Command #$z: $command"
-        $command
-        ((z++))
+        $command &
 
-        mkdir -p outputs
-        mv "$outfile" "outputs/$outfile"
-
-        mkdir -p stats
-        mv "$statsfile" "stats/$statsfile"
     done
 done
