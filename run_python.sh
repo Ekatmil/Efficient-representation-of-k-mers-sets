@@ -31,7 +31,7 @@ do
         z="${input_file}_k${x}_${algorithm}"
         outfile="./outputs/out_$z"
         statsfile="./stats/stats_$z"
-        command="python3 main.py -k $x -${y} -i test_fasta.fa -o $outfile -S $statsfile" 
+        command="python3 main.py -k $x -${y} -i ${input_file} -o $outfile -S $statsfile" 
         echo "Command #$z: $command"
         $command &
 
