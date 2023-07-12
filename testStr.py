@@ -56,11 +56,9 @@ def applyMask(st, bn):
     print ("####################")
     return new_st
 
+# Tests everything 
 def testAll(st, lst, k, *bn):
     if bn:
         st = applyMask(st, bn[0])
     allKMers(st, lst)
     noDifferentStr (st, lst, k)
-
-
-

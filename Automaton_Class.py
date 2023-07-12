@@ -13,35 +13,35 @@ class Aho_Corasick:
         return any((state, char) in self.goto for char in ["A", "C", "T", "G"]) == False
 
 
-    #CONSTRUCTION OF GOTO FUNCTION (Algo 2)
+    #CONSTRUCTION OF GOTO FUNCTION 
     #Output: goto function in form (i, b) : j where there is an edge b between states i and j 
 
     def goto_function(self):
         new_state = 0
-        count = 0
+
 
         for kmer in self.kmers:
             state = 0
-        #procedure enter 
-        # if it is new, than always FAIL and skip to third loop 
             j = 0
             for char in kmer:
                 res = self.goto.get((state, char), -1)
-            
+      
                 if res == -1:
                     break
+
                 state = res
                 j += 1
 
             for char in kmer[j:]:
                 new_state += 1
+       
                 self.goto[(state, char)] = new_state #goto (starting state, value of edge) = new state
                 state = new_state
-            count = count + 1
+
+        
 
 
-
-    #CONSTRUCTION OF FAIL FUNCTION (Algo 3)
+    #CONSTRUCTION OF FAIL FUNCTION
     #Output: fail function in form i:j where i is current state and j is where i fails 
 
     def fail_function(self):
