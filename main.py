@@ -1,5 +1,4 @@
 #!/usr/bin/env python 3
-from json import load
 import sys
 import argparse
 import sys
@@ -10,7 +9,6 @@ from Load_fasta import *
 from mask import *
 
 from simplitig import *
-from Greedy_Approxination import *
 from Greedy_AC import *
 from tgreedy import *
 
@@ -23,8 +21,6 @@ def call():
     def_k = 31
     st1 = time.time()
     st = time.process_time()
-
-
 
     parser = argparse.ArgumentParser(description="")
 
@@ -43,16 +39,6 @@ def call():
         '--simplitig',
         help='call for Simplitig',
         dest='simplitig',
-        action="store_true",
-        required=False,
-    )
-
-
-    parser.add_argument(
-        '-g',
-        '--greedy',
-        dest='greedy',
-        help="call for Greedy Approximation",
         action="store_true",
         required=False,
     )
@@ -117,11 +103,11 @@ def call():
         type=str,
         required=False,
     )
+
     config = parser.parse_args(sys.argv[1:])
 
-
-    #if no algorithm chosen
-    if not (config.greedy or config.simplitig or config.ahoCorasick or config.tgreedy):
+    #if no algorithm is chosen
+    if not (config.simplitig or config.ahoCorasick or config.tgreedy):
         print('Select one of the options for the algorithm.\n')
         parser.print_help()
         parser.exit(0)
@@ -131,17 +117,11 @@ def call():
     arr_saved = arr.copy()
     algorithm = ""
 
-
     #algorithms
     if config.simplitig == True:
         algorithm = "Simplitig"
         superSet = compute_simplitig(arr, config.k)  #set
         superStr = "".join(superSet)
-    elif config.greedy == True:
-        algorithm = "Greedy_Approximation"
-        superStr = shortest_superstring (list(arr))
-        # superSet = compute_simplitig(arr, config.k)  #set
-        # superStr = findSuperStr(superSet)
     elif config.ahoCorasick == True:
         algorithm = "Greedy_AC"
         superSet = FindSuperStr (arr)
@@ -150,7 +130,6 @@ def call():
         algorithm = "TGreedy"
         superSet = FindSuperStrTgreedy(arr)
         superStr = "".join(superSet)
-
 
     #mask and output 
 
@@ -164,10 +143,8 @@ def call():
             output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStr)
-            # output_file.close()
             fileMask = open(config.output + ".mask", 'w')
             fileMask.write(superStrMask)
-            # fileMask.close()
             mask = mask + ": " + config.output + ".mask"
         else:
             print(superStr + "\n" + superStrMask)
@@ -179,7 +156,6 @@ def call():
             output_name = config.output
             output_file = open(config.output, 'w')
             output_file.write(superStrMask)
-            # output_file.close()
         else:
             print(superStrMask)
 
@@ -212,8 +188,6 @@ def call():
                     tm,
                     tm1, 
                     memory)
-
-
 
 if __name__ == '__main__':
     call()
